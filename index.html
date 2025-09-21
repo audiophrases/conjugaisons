@@ -1,1 +1,811 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Atelier de conjugaison</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg-gradient: linear-gradient(135deg, #f5f7ff 0%, #f1f8ff 45%, #f8f2ff 100%);
+      --accent: #3c6df0;
+      --accent-dark: #274ac7;
+      --success: #2f9d5d;
+      --error: #d64550;
+      --neutral: #3a3a3a;
+      --card-bg: rgba(255, 255, 255, 0.92);
+      --border: #e3e7f3;
+      --shadow: 0 20px 45px rgba(60, 109, 240, 0.08);
+    }
 
+    * {
+      box-sizing: border-box;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Segoe UI", "Fira Sans", "Roboto", sans-serif;
+      color: var(--neutral);
+      background: var(--bg-gradient);
+      line-height: 1.6;
+      padding: 24px;
+    }
+
+    main {
+      max-width: 960px;
+      margin: 0 auto;
+      background: var(--card-bg);
+      backdrop-filter: blur(12px);
+      border-radius: 28px;
+      padding: 36px clamp(20px, 4vw, 48px);
+      box-shadow: var(--shadow);
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 32px;
+    }
+
+    h1 {
+      font-size: clamp(2rem, 4vw, 2.8rem);
+      margin: 0 0 12px;
+      color: var(--accent-dark);
+      letter-spacing: -0.02em;
+    }
+
+    .intro {
+      margin: 0 auto;
+      max-width: 640px;
+      font-size: 1rem;
+      color: #4a4a4a;
+    }
+
+    .selection {
+      margin-top: 40px;
+    }
+
+    .selection h2 {
+      font-size: 1.35rem;
+      margin-bottom: 12px;
+      color: var(--accent-dark);
+    }
+
+    .toggle-all {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 14px;
+      border-radius: 999px;
+      background: rgba(60, 109, 240, 0.08);
+      color: var(--accent-dark);
+      font-weight: 600;
+      margin-bottom: 16px;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .toggle-all input {
+      width: 18px;
+      height: 18px;
+    }
+
+    .tense-options {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .tense-option {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 16px;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.72);
+      transition: border 0.2s ease, box-shadow 0.2s ease;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .tense-option:hover,
+    .tense-option:focus-within {
+      border-color: rgba(60, 109, 240, 0.45);
+      box-shadow: 0 12px 20px rgba(60, 109, 240, 0.08);
+    }
+
+    .tense-option input {
+      margin-top: 4px;
+      width: 18px;
+      height: 18px;
+      flex-shrink: 0;
+    }
+
+    .tense-option span {
+      display: block;
+    }
+
+    .tense-option strong {
+      display: block;
+      color: var(--neutral);
+      font-size: 1.05rem;
+      margin-bottom: 6px;
+    }
+
+    .tense-option small {
+      display: block;
+      color: #5b5b5b;
+      font-size: 0.9rem;
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+    }
+
+    button {
+      appearance: none;
+      border: none;
+      border-radius: 999px;
+      padding: 12px 22px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 0.15s ease, box-shadow 0.2s ease;
+      background: var(--accent);
+      color: white;
+      box-shadow: 0 12px 25px rgba(60, 109, 240, 0.3);
+    }
+
+    button:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 16px 32px rgba(60, 109, 240, 0.28);
+    }
+
+    button:active {
+      transform: translateY(0);
+      box-shadow: 0 8px 18px rgba(60, 109, 240, 0.25);
+    }
+
+    button.secondary {
+      background: rgba(60, 109, 240, 0.1);
+      color: var(--accent-dark);
+      box-shadow: none;
+      border: 1px solid rgba(60, 109, 240, 0.35);
+    }
+
+    button.secondary:hover {
+      background: rgba(60, 109, 240, 0.18);
+      box-shadow: none;
+    }
+
+    #selection-warning {
+      color: var(--error);
+      font-weight: 600;
+      margin: 12px 0 0;
+    }
+
+    #quiz-section {
+      margin-top: 48px;
+    }
+
+    #quiz-section.hidden {
+      display: none;
+    }
+
+    .question-card {
+      padding: 24px;
+      border-radius: 20px;
+      background: rgba(248, 249, 255, 0.9);
+      border: 1px solid rgba(60, 109, 240, 0.12);
+      box-shadow: 0 16px 28px rgba(60, 109, 240, 0.1);
+    }
+
+    .question-card h3 {
+      margin-top: 0;
+      margin-bottom: 12px;
+      font-size: 1.25rem;
+      color: var(--accent-dark);
+    }
+
+    .question-details {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 18px;
+      margin: 0 0 16px;
+    }
+
+    .question-details span {
+      display: inline-flex;
+      align-items: center;
+      padding: 8px 14px;
+      border-radius: 999px;
+      background: rgba(60, 109, 240, 0.14);
+      color: var(--accent-dark);
+      font-size: 0.95rem;
+    }
+
+    form {
+      margin-top: 20px;
+      display: grid;
+      gap: 16px;
+    }
+
+    label {
+      font-weight: 600;
+      color: var(--neutral);
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 12px 16px;
+      border-radius: 14px;
+      border: 2px solid transparent;
+      font-size: 1.05rem;
+      transition: border 0.2s ease, box-shadow 0.2s ease;
+      background: rgba(255, 255, 255, 0.92);
+    }
+
+    input[type="text"]:focus {
+      outline: none;
+      border-color: rgba(60, 109, 240, 0.55);
+      box-shadow: 0 0 0 4px rgba(60, 109, 240, 0.15);
+    }
+
+    input[type="text"].is-correct {
+      border-color: rgba(47, 157, 93, 0.6);
+      box-shadow: 0 0 0 4px rgba(47, 157, 93, 0.15);
+    }
+
+    input[type="text"].is-incorrect {
+      border-color: rgba(214, 69, 80, 0.6);
+      box-shadow: 0 0 0 4px rgba(214, 69, 80, 0.12);
+    }
+
+    .help-text {
+      margin: -8px 0 0;
+      font-size: 0.9rem;
+      color: var(--error);
+      min-height: 1.1em;
+    }
+
+    #feedback {
+      margin-top: 24px;
+      min-height: 120px;
+    }
+
+    .feedback-card {
+      padding: 20px 24px;
+      border-radius: 18px;
+      border: 1px solid transparent;
+      background: white;
+      box-shadow: 0 18px 36px rgba(25, 39, 62, 0.08);
+    }
+
+    .feedback-card.correct {
+      border-color: rgba(47, 157, 93, 0.45);
+    }
+
+    .feedback-card.incorrect {
+      border-color: rgba(214, 69, 80, 0.45);
+    }
+
+    .feedback-card h4 {
+      margin: 0 0 10px;
+      font-size: 1.1rem;
+    }
+
+    .feedback-card.correct h4 {
+      color: var(--success);
+    }
+
+    .feedback-card.incorrect h4 {
+      color: var(--error);
+    }
+
+    .feedback-card p {
+      margin: 8px 0;
+    }
+
+    .answer-highlight {
+      font-weight: 600;
+      display: inline-block;
+    }
+
+    .error-part {
+      background: rgba(214, 69, 80, 0.15);
+      color: var(--error);
+      padding: 0 4px;
+      border-radius: 6px;
+    }
+
+    .error-part.manquant {
+      font-style: italic;
+      opacity: 0.8;
+    }
+
+    .expected-ending {
+      background: rgba(60, 109, 240, 0.12);
+      color: var(--accent-dark);
+      padding: 0 4px;
+      border-radius: 6px;
+      font-weight: 600;
+    }
+
+    .score {
+      margin-top: 28px;
+      font-weight: 600;
+      color: var(--accent-dark);
+    }
+
+    #next-question {
+      margin-top: 12px;
+    }
+
+    @media (max-width: 640px) {
+      body {
+        padding: 12px;
+      }
+
+      main {
+        padding: 28px 18px;
+      }
+
+      .tense-options {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <h1>Atelier de conjugaison</h1>
+      <p class="intro">
+        Sélectionne les temps verbaux que tu souhaites réviser, puis écris la forme correcte du verbe proposé.
+        Chaque réponse te dira immédiatement si la terminaison est juste ou non.
+      </p>
+    </header>
+
+    <section class="selection" aria-labelledby="selection-title">
+      <h2 id="selection-title">Choisis les temps à pratiquer</h2>
+      <label class="toggle-all" for="toggle-all">
+        <input type="checkbox" id="toggle-all" checked />
+        <span>Tout cocher / décocher</span>
+      </label>
+      <div class="tense-options">
+        <label class="tense-option">
+          <input type="checkbox" value="present" class="tense-checkbox" checked />
+          <span>
+            <strong>Présent de l’indicatif</strong>
+            <small>Actions en cours ou habituelles.</small>
+          </span>
+        </label>
+        <label class="tense-option">
+          <input type="checkbox" value="imparfait" class="tense-checkbox" checked />
+          <span>
+            <strong>Imparfait de l’indicatif</strong>
+            <small>Descriptions et habitudes passées.</small>
+          </span>
+        </label>
+        <label class="tense-option">
+          <input type="checkbox" value="futur" class="tense-checkbox" checked />
+          <span>
+            <strong>Futur simple</strong>
+            <small>Actions à venir.</small>
+          </span>
+        </label>
+        <label class="tense-option">
+          <input type="checkbox" value="passe_compose" class="tense-checkbox" checked />
+          <span>
+            <strong>Passé composé</strong>
+            <small>Actions achevées dans le passé.</small>
+          </span>
+        </label>
+        <label class="tense-option">
+          <input type="checkbox" value="conditionnel" class="tense-checkbox" checked />
+          <span>
+            <strong>Conditionnel présent</strong>
+            <small>Actions soumises à une condition.</small>
+          </span>
+        </label>
+      </div>
+      <div class="actions">
+        <button id="start-quiz" type="button">Commencer l’entraînement</button>
+        <span id="selection-warning" role="alert"></span>
+      </div>
+      <p class="intro" style="margin-top: 14px;">
+        Astuce : pour modifier la sélection en cours de route, ajuste les cases à cocher puis relance l’entraînement.
+      </p>
+    </section>
+
+    <section id="quiz-section" class="hidden" aria-live="polite">
+      <div class="question-card">
+        <h3>Nouvelle consigne</h3>
+        <div class="question-details">
+          <span id="question-tense">Temps :</span>
+          <span id="question-verb">Verbe :</span>
+          <span id="question-pronoun">Pronom :</span>
+        </div>
+        <p>
+          Écris seulement la forme du verbe <strong>sans le pronom sujet</strong>. Les accords sont donnés au masculin par défaut.
+        </p>
+        <form id="answer-form">
+          <div>
+            <label for="answer-input">Ta réponse</label>
+            <input type="text" id="answer-input" autocomplete="off" spellcheck="false" />
+            <p id="input-help" class="help-text"></p>
+          </div>
+          <div class="actions">
+            <button id="submit-answer" type="submit">Valider</button>
+            <button id="next-question" type="button" class="secondary hidden">Nouvelle question</button>
+          </div>
+        </form>
+        <div id="feedback" aria-live="polite"></div>
+        <p class="score">Score : <span id="score-value">0 / 0</span></p>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const TENSE_INFO = {
+        present: { label: 'Présent de l’indicatif' },
+        imparfait: { label: 'Imparfait de l’indicatif' },
+        futur: { label: 'Futur simple' },
+        passe_compose: { label: 'Passé composé' },
+        conditionnel: { label: 'Conditionnel présent' },
+      };
+
+      const PRONOUNS = {
+        je: { question: 'je', subject: 'je', description: '1re personne du singulier' },
+        tu: { question: 'tu', subject: 'tu', description: '2e personne du singulier' },
+        il: { question: 'il / elle / on', subject: 'il', description: '3e personne du singulier' },
+        nous: { question: 'nous', subject: 'nous', description: '1re personne du pluriel' },
+        vous: { question: 'vous', subject: 'vous', description: '2e personne du pluriel' },
+        ils: { question: 'ils / elles', subject: 'ils', description: '3e personne du pluriel' },
+      };
+
+      const PRONOUN_KEYS = ['je', 'tu', 'il', 'nous', 'vous', 'ils'];
+
+      const CONJUGATIONS = {
+        present: {
+          'parler': { je: 'parle', tu: 'parles', il: 'parle', nous: 'parlons', vous: 'parlez', ils: 'parlent' },
+          'finir': { je: 'finis', tu: 'finis', il: 'finit', nous: 'finissons', vous: 'finissez', ils: 'finissent' },
+          'aller': { je: 'vais', tu: 'vas', il: 'va', nous: 'allons', vous: 'allez', ils: 'vont' },
+          'avoir': { je: 'ai', tu: 'as', il: 'a', nous: 'avons', vous: 'avez', ils: 'ont' },
+          'être': { je: 'suis', tu: 'es', il: 'est', nous: 'sommes', vous: 'êtes', ils: 'sont' },
+        },
+        imparfait: {
+          'parler': { je: 'parlais', tu: 'parlais', il: 'parlait', nous: 'parlions', vous: 'parliez', ils: 'parlaient' },
+          'finir': { je: 'finissais', tu: 'finissais', il: 'finissait', nous: 'finissions', vous: 'finissiez', ils: 'finissaient' },
+          'aller': { je: 'allais', tu: 'allais', il: 'allait', nous: 'allions', vous: 'alliez', ils: 'allaient' },
+          'avoir': { je: 'avais', tu: 'avais', il: 'avait', nous: 'avions', vous: 'aviez', ils: 'avaient' },
+          'être': { je: 'étais', tu: 'étais', il: 'était', nous: 'étions', vous: 'étiez', ils: 'étaient' },
+        },
+        futur: {
+          'parler': { je: 'parlerai', tu: 'parleras', il: 'parlera', nous: 'parlerons', vous: 'parlerez', ils: 'parleront' },
+          'finir': { je: 'finirai', tu: 'finiras', il: 'finira', nous: 'finirons', vous: 'finirez', ils: 'finiront' },
+          'aller': { je: 'irai', tu: 'iras', il: 'ira', nous: 'irons', vous: 'irez', ils: 'iront' },
+          'avoir': { je: 'aurai', tu: 'auras', il: 'aura', nous: 'aurons', vous: 'aurez', ils: 'auront' },
+          'être': { je: 'serai', tu: 'seras', il: 'sera', nous: 'serons', vous: 'serez', ils: 'seront' },
+        },
+        passe_compose: {
+          'parler': { je: 'ai parlé', tu: 'as parlé', il: 'a parlé', nous: 'avons parlé', vous: 'avez parlé', ils: 'ont parlé' },
+          'finir': { je: 'ai fini', tu: 'as fini', il: 'a fini', nous: 'avons fini', vous: 'avez fini', ils: 'ont fini' },
+          'aller': { je: 'suis allé', tu: 'es allé', il: 'est allé', nous: 'sommes allés', vous: 'êtes allés', ils: 'sont allés' },
+          'avoir': { je: 'ai eu', tu: 'as eu', il: 'a eu', nous: 'avons eu', vous: 'avez eu', ils: 'ont eu' },
+          'être': { je: 'ai été', tu: 'as été', il: 'a été', nous: 'avons été', vous: 'avez été', ils: 'ont été' },
+        },
+        conditionnel: {
+          'parler': { je: 'parlerais', tu: 'parlerais', il: 'parlerait', nous: 'parlerions', vous: 'parleriez', ils: 'parleraient' },
+          'finir': { je: 'finirais', tu: 'finirais', il: 'finirait', nous: 'finirions', vous: 'finiriez', ils: 'finiraient' },
+          'aller': { je: 'irais', tu: 'irais', il: 'irait', nous: 'irions', vous: 'iriez', ils: 'iraient' },
+          'avoir': { je: 'aurais', tu: 'aurais', il: 'aurait', nous: 'aurions', vous: 'auriez', ils: 'auraient' },
+          'être': { je: 'serais', tu: 'serais', il: 'serait', nous: 'serions', vous: 'seriez', ils: 'seraient' },
+        },
+      };
+
+      const toggleAll = document.getElementById('toggle-all');
+      const tenseCheckboxes = Array.from(document.querySelectorAll('.tense-checkbox'));
+      const startButton = document.getElementById('start-quiz');
+      const warning = document.getElementById('selection-warning');
+      const quizSection = document.getElementById('quiz-section');
+      const questionTense = document.getElementById('question-tense');
+      const questionVerb = document.getElementById('question-verb');
+      const questionPronoun = document.getElementById('question-pronoun');
+      const answerForm = document.getElementById('answer-form');
+      const answerInput = document.getElementById('answer-input');
+      const submitButton = document.getElementById('submit-answer');
+      const nextButton = document.getElementById('next-question');
+      const feedbackBox = document.getElementById('feedback');
+      const scoreValue = document.getElementById('score-value');
+      const helpText = document.getElementById('input-help');
+
+      const state = {
+        selectedTenses: [],
+        currentQuestion: null,
+        total: 0,
+        correct: 0,
+      };
+
+      const vowels = /^(a|à|â|e|é|è|ê|ë|i|î|ï|o|ô|u|û|ù|y|h|œ|æ)/i;
+
+      function escapeHTML(value) {
+        return value
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;')
+          .replace(/'/g, '&#39;');
+      }
+
+      function normalizeAnswer(value) {
+        return value
+          .normalize('NFC')
+          .toLowerCase()
+          .replace(/\s+/g, ' ')
+          .trim();
+      }
+
+      function formatScore() {
+        scoreValue.textContent = `${state.correct} / ${state.total}`;
+      }
+
+      function buildFullAnswer(pronounKey, form) {
+        const trimmed = form.trim();
+        const pronounInfo = PRONOUNS[pronounKey];
+        const needsElision = pronounKey === 'je' && vowels.test(trimmed);
+        const pronoun = needsElision ? "j'" : pronounInfo.subject;
+        const separator = needsElision ? '' : ' ';
+        return `${pronoun}${separator}${trimmed}`;
+      }
+
+      function computeDiffSegments(expected, actual) {
+        const expectedNFC = expected.normalize('NFC');
+        const actualNFC = actual.normalize('NFC');
+        const expectedLower = expectedNFC.toLowerCase();
+        const actualLower = actualNFC.toLowerCase();
+
+        let prefixLength = 0;
+        const minLength = Math.min(expectedLower.length, actualLower.length);
+        while (
+          prefixLength < minLength &&
+          expectedLower[prefixLength] === actualLower[prefixLength]
+        ) {
+          prefixLength += 1;
+        }
+
+        let suffixLength = 0;
+        while (
+          suffixLength < expectedLower.length - prefixLength &&
+          suffixLength < actualLower.length - prefixLength &&
+          expectedLower[expectedLower.length - 1 - suffixLength] === actualLower[actualLower.length - 1 - suffixLength]
+        ) {
+          suffixLength += 1;
+        }
+
+        const userDiffStart = prefixLength;
+        const userDiffEnd = actualLower.length - suffixLength;
+        const expectedDiffEnd = expectedLower.length - suffixLength;
+
+        return {
+          user: {
+            prefix: actualNFC.slice(0, userDiffStart),
+            diff: actualNFC.slice(userDiffStart, userDiffEnd),
+            suffix: actualNFC.slice(userDiffEnd),
+          },
+          expected: {
+            prefix: expectedNFC.slice(0, prefixLength),
+            diff: expectedNFC.slice(prefixLength, expectedDiffEnd),
+            suffix: expectedNFC.slice(expectedDiffEnd),
+          },
+        };
+      }
+
+      function formatUserDiff(segments) {
+        const prefix = escapeHTML(segments.user.prefix);
+        const suffix = escapeHTML(segments.user.suffix);
+        const diff = segments.user.diff
+          ? `<span class="error-part">${escapeHTML(segments.user.diff)}</span>`
+          : '<span class="error-part manquant">∅</span>';
+        return `${prefix}${diff}${suffix}`;
+      }
+
+      function formatExpectedDiff(pronounKey, segments) {
+        const prefix = escapeHTML(segments.expected.prefix);
+        const suffix = escapeHTML(segments.expected.suffix);
+        const diff = segments.expected.diff
+          ? `<span class="expected-ending">${escapeHTML(segments.expected.diff)}</span>`
+          : '';
+        const needsElision = pronounKey === 'je' && vowels.test(segments.expected.prefix + segments.expected.diff + segments.expected.suffix);
+        const pronounText = needsElision ? "j'" : PRONOUNS[pronounKey].subject;
+        const pronoun = escapeHTML(pronounText);
+        const separator = needsElision ? '' : ' ';
+        return `${pronoun}${separator}${prefix}${diff}${suffix}`;
+      }
+
+      function buildHint(segments) {
+        if (!segments.user.diff && segments.expected.diff) {
+          return `Tu as oublié la terminaison « ${escapeHTML(segments.expected.diff)} ».`;
+        }
+        if (segments.user.diff && !segments.expected.diff) {
+          return `Tu as ajouté « ${escapeHTML(segments.user.diff)} » en trop.`;
+        }
+        if (segments.user.diff && segments.expected.diff) {
+          return `La terminaison correcte est « ${escapeHTML(segments.expected.diff)} ».`;
+        }
+        return '';
+      }
+
+      function pickRandom(array) {
+        return array[Math.floor(Math.random() * array.length)];
+      }
+
+      function syncToggleAll() {
+        const checkedCount = tenseCheckboxes.filter(cb => cb.checked).length;
+        if (checkedCount === 0) {
+          toggleAll.checked = false;
+          toggleAll.indeterminate = false;
+        } else if (checkedCount === tenseCheckboxes.length) {
+          toggleAll.checked = true;
+          toggleAll.indeterminate = false;
+        } else {
+          toggleAll.checked = false;
+          toggleAll.indeterminate = true;
+        }
+      }
+
+      toggleAll.addEventListener('change', () => {
+        tenseCheckboxes.forEach(cb => {
+          cb.checked = toggleAll.checked;
+        });
+        toggleAll.indeterminate = false;
+      });
+
+      tenseCheckboxes.forEach(cb => {
+        cb.addEventListener('change', syncToggleAll);
+      });
+
+      function resetFeedback() {
+        feedbackBox.innerHTML = '';
+        answerInput.classList.remove('is-correct', 'is-incorrect');
+        helpText.textContent = '';
+      }
+
+      function loadQuestion() {
+        if (!state.selectedTenses.length) {
+          return;
+        }
+
+        const tenseId = pickRandom(state.selectedTenses);
+        const verbs = Object.keys(CONJUGATIONS[tenseId]);
+        const verb = pickRandom(verbs);
+        const pronounKey = pickRandom(PRONOUN_KEYS);
+        const answer = CONJUGATIONS[tenseId][verb][pronounKey];
+
+        state.currentQuestion = {
+          tenseId,
+          verb,
+          pronounKey,
+          answer,
+        };
+
+        questionTense.textContent = `Temps : ${TENSE_INFO[tenseId].label}`;
+        questionVerb.textContent = `Verbe : ${verb}`;
+        questionPronoun.textContent = `Pronom : ${PRONOUNS[pronounKey].question}`;
+
+        answerInput.value = '';
+        answerInput.disabled = false;
+        submitButton.disabled = false;
+        nextButton.classList.add('hidden');
+        nextButton.disabled = true;
+        resetFeedback();
+        answerInput.focus();
+      }
+
+      function handleStart() {
+        const selected = tenseCheckboxes.filter(cb => cb.checked).map(cb => cb.value);
+        if (!selected.length) {
+          warning.textContent = 'Sélectionne au moins un temps verbal pour commencer.';
+          return;
+        }
+        warning.textContent = '';
+
+        state.selectedTenses = selected;
+        state.total = 0;
+        state.correct = 0;
+        formatScore();
+
+        if (quizSection.classList.contains('hidden')) {
+          quizSection.classList.remove('hidden');
+        }
+
+        loadQuestion();
+        quizSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+
+      function handleSubmit(event) {
+        event.preventDefault();
+        if (!state.currentQuestion || submitButton.disabled) {
+          return;
+        }
+
+        const userRaw = answerInput.value.trim();
+        if (!userRaw) {
+          helpText.textContent = 'Écris ta proposition avant de valider.';
+          answerInput.focus();
+          return;
+        }
+
+        const expected = state.currentQuestion.answer;
+        const normalizedUser = normalizeAnswer(userRaw);
+        const normalizedExpected = normalizeAnswer(expected);
+
+        state.total += 1;
+
+        if (normalizedUser === normalizedExpected) {
+          state.correct += 1;
+          const fullAnswer = buildFullAnswer(state.currentQuestion.pronounKey, expected);
+          feedbackBox.innerHTML = `
+            <div class="feedback-card correct">
+              <h4>Bravo !</h4>
+              <p>C’est correct : <span class="answer-highlight">${escapeHTML(fullAnswer)}</span>.</p>
+            </div>
+          `;
+          answerInput.classList.add('is-correct');
+        } else {
+          const segments = computeDiffSegments(expected, userRaw);
+          const userMarkup = formatUserDiff(segments);
+          const correctionMarkup = formatExpectedDiff(state.currentQuestion.pronounKey, segments);
+          const hint = buildHint(segments);
+          feedbackBox.innerHTML = `
+            <div class="feedback-card incorrect">
+              <h4>Ce n’est pas encore ça.</h4>
+              <p>Ta réponse : <span class="answer-highlight">${userMarkup}</span></p>
+              <p>Correction : <span class="answer-highlight">${correctionMarkup}</span></p>
+              ${hint ? `<p>${hint}</p>` : ''}
+            </div>
+          `;
+          answerInput.classList.add('is-incorrect');
+        }
+
+        formatScore();
+        submitButton.disabled = true;
+        answerInput.disabled = true;
+        nextButton.classList.remove('hidden');
+        nextButton.disabled = false;
+        nextButton.focus();
+      }
+
+      function handleNext() {
+        if (!state.selectedTenses.length) {
+          warning.textContent = 'Ajoute au moins un temps pour continuer l’entraînement.';
+          return;
+        }
+        warning.textContent = '';
+        loadQuestion();
+      }
+
+      startButton.addEventListener('click', handleStart);
+      answerForm.addEventListener('submit', handleSubmit);
+      nextButton.addEventListener('click', handleNext);
+
+      answerInput.addEventListener('input', () => {
+        answerInput.classList.remove('is-correct', 'is-incorrect');
+        helpText.textContent = '';
+      });
+
+      syncToggleAll();
+    });
+  </script>
+</body>
+</html>
