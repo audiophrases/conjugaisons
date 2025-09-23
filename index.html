@@ -75,6 +75,75 @@
       color: var(--accent-dark);
     }
 
+    .selection-block {
+      margin-top: 28px;
+    }
+
+    .selection-block:first-of-type {
+      margin-top: 20px;
+    }
+
+    .selection-block h3 {
+      font-size: 1.15rem;
+      margin: 0 0 12px;
+      color: var(--accent-dark);
+    }
+
+    .verb-groups {
+      display: grid;
+      gap: 18px;
+    }
+
+    .verb-group {
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 18px;
+      background: rgba(255, 255, 255, 0.72);
+    }
+
+    .verb-group h4 {
+      margin: 0;
+      font-size: 1.05rem;
+      color: var(--neutral);
+    }
+
+    .verb-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .verb-option {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 12px;
+      border-radius: 12px;
+      background: rgba(60, 109, 240, 0.05);
+      border: 1px solid transparent;
+      transition: border 0.2s ease, background 0.2s ease;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .verb-option:hover,
+    .verb-option:focus-within {
+      background: rgba(60, 109, 240, 0.12);
+      border-color: rgba(60, 109, 240, 0.3);
+    }
+
+    .verb-option input {
+      width: 16px;
+      height: 16px;
+      flex-shrink: 0;
+    }
+
+    .verb-option span {
+      font-size: 0.95rem;
+      color: var(--neutral);
+    }
+
     .toggle-all {
       display: inline-flex;
       align-items: center;
@@ -362,6 +431,10 @@
       .tense-options {
         grid-template-columns: 1fr;
       }
+
+      .verb-list {
+        grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      }
     }
   </style>
 </head>
@@ -370,54 +443,68 @@
     <header>
       <h1>Atelier de conjugaison</h1>
       <p class="intro">
-        Sélectionne les temps verbaux que tu souhaites réviser, puis écris la forme correcte du verbe proposé.
-        Chaque réponse te dira immédiatement si la terminaison est juste ou non.
+        Sélectionne les temps verbaux et les verbes que tu souhaites réviser, puis écris la forme correcte du verbe
+        proposé. Chaque réponse te dira immédiatement si la terminaison est juste ou non.
       </p>
     </header>
 
     <section class="selection" aria-labelledby="selection-title">
-      <h2 id="selection-title">Choisis les temps à pratiquer</h2>
-      <label class="toggle-all" for="toggle-all">
-        <input type="checkbox" id="toggle-all" checked />
-        <span>Tout cocher / décocher</span>
-      </label>
-      <div class="tense-options">
-        <label class="tense-option">
-          <input type="checkbox" value="present" class="tense-checkbox" checked />
-          <span>
-            <strong>Présent de l’indicatif</strong>
-            <small>Actions en cours ou habituelles.</small>
-          </span>
+      <h2 id="selection-title">Sélectionne ce que tu souhaites pratiquer</h2>
+
+      <div class="selection-block">
+        <h3 id="tense-selection-title">Temps verbaux</h3>
+        <label class="toggle-all" for="toggle-all-tenses">
+          <input type="checkbox" id="toggle-all-tenses" checked />
+          <span>Tout cocher / décocher</span>
         </label>
-        <label class="tense-option">
-          <input type="checkbox" value="imparfait" class="tense-checkbox" checked />
-          <span>
-            <strong>Imparfait de l’indicatif</strong>
-            <small>Descriptions et habitudes passées.</small>
-          </span>
-        </label>
-        <label class="tense-option">
-          <input type="checkbox" value="futur" class="tense-checkbox" checked />
-          <span>
-            <strong>Futur simple</strong>
-            <small>Actions à venir.</small>
-          </span>
-        </label>
-        <label class="tense-option">
-          <input type="checkbox" value="passe_compose" class="tense-checkbox" checked />
-          <span>
-            <strong>Passé composé</strong>
-            <small>Actions achevées dans le passé.</small>
-          </span>
-        </label>
-        <label class="tense-option">
-          <input type="checkbox" value="conditionnel" class="tense-checkbox" checked />
-          <span>
-            <strong>Conditionnel présent</strong>
-            <small>Actions soumises à une condition.</small>
-          </span>
-        </label>
+        <div class="tense-options" aria-labelledby="tense-selection-title">
+          <label class="tense-option">
+            <input type="checkbox" value="present" class="tense-checkbox" checked />
+            <span>
+              <strong>Présent de l’indicatif</strong>
+              <small>Actions en cours ou habituelles.</small>
+            </span>
+          </label>
+          <label class="tense-option">
+            <input type="checkbox" value="imparfait" class="tense-checkbox" checked />
+            <span>
+              <strong>Imparfait de l’indicatif</strong>
+              <small>Descriptions et habitudes passées.</small>
+            </span>
+          </label>
+          <label class="tense-option">
+            <input type="checkbox" value="futur" class="tense-checkbox" checked />
+            <span>
+              <strong>Futur simple</strong>
+              <small>Actions à venir.</small>
+            </span>
+          </label>
+          <label class="tense-option">
+            <input type="checkbox" value="passe_compose" class="tense-checkbox" checked />
+            <span>
+              <strong>Passé composé</strong>
+              <small>Actions achevées dans le passé.</small>
+            </span>
+          </label>
+          <label class="tense-option">
+            <input type="checkbox" value="conditionnel" class="tense-checkbox" checked />
+            <span>
+              <strong>Conditionnel présent</strong>
+              <small>Actions soumises à une condition.</small>
+            </span>
+          </label>
+        </div>
       </div>
+
+      <div class="selection-block">
+        <h3 id="verb-selection-title">Verbes à travailler</h3>
+        <label class="toggle-all" for="toggle-all-verbs">
+          <input type="checkbox" id="toggle-all-verbs" checked />
+          <span>Tout cocher / décocher</span>
+        </label>
+        <div id="verb-options" class="verb-groups" aria-labelledby="verb-selection-title"></div>
+      </div>
+
       <div class="actions">
         <button id="start-quiz" type="button">Commencer l’entraînement</button>
         <span id="selection-warning" role="alert"></span>
@@ -465,6 +552,45 @@
         conditionnel: { label: 'Conditionnel présent' },
       };
 
+      const VERB_GROUPS = [
+        {
+          title: 'Incontournables',
+          verbs: ['être', 'avoir', 'aller', 'faire', 'dire', 'pouvoir', 'vouloir', 'devoir', 'savoir', 'venir'],
+        },
+        {
+          title: 'Verbes du quotidien',
+          verbs: ['prendre', 'mettre', 'donner', 'parler', 'aimer', 'travailler', 'habiter', 'regarder', 'écouter', 'manger', 'boire'],
+        },
+        {
+          title: 'Mouvements et déplacements',
+          verbs: ['arriver', 'entrer', 'sortir', 'partir', 'rentrer', 'rester', 'monter', 'descendre', 'passer'],
+        },
+        {
+          title: 'Apprendre et choisir',
+          verbs: ['acheter', 'payer', 'choisir', 'finir', 'comprendre', 'apprendre'],
+        },
+        {
+          title: 'Lecture et ouverture',
+          verbs: ['écrire', 'lire', 'ouvrir', 'fermer'],
+        },
+        {
+          title: 'Routine quotidienne',
+          verbs: ['dormir', 'se lever', 'se coucher', 'se réveiller'],
+        },
+        {
+          title: 'Prendre soin de soi',
+          verbs: ['se laver', "s'habiller"],
+        },
+        {
+          title: 'Efforts et réussite',
+          verbs: ['attendre', 'commencer', 'réussir', 'perdre', 'gagner'],
+        },
+        {
+          title: 'Bouger',
+          verbs: ['courir', 'marcher'],
+        },
+      ];
+
       const PRONOUNS = {
         je: { question: 'je', subject: 'je', description: '1re personne du singulier' },
         tu: { question: 'tu', subject: 'tu', description: '2e personne du singulier' },
@@ -476,46 +602,423 @@
 
       const PRONOUN_KEYS = ['je', 'tu', 'il', 'nous', 'vous', 'ils'];
 
-      const CONJUGATIONS = {
-        present: {
-          'parler': { je: 'parle', tu: 'parles', il: 'parle', nous: 'parlons', vous: 'parlez', ils: 'parlent' },
-          'finir': { je: 'finis', tu: 'finis', il: 'finit', nous: 'finissons', vous: 'finissez', ils: 'finissent' },
-          'aller': { je: 'vais', tu: 'vas', il: 'va', nous: 'allons', vous: 'allez', ils: 'vont' },
-          'avoir': { je: 'ai', tu: 'as', il: 'a', nous: 'avons', vous: 'avez', ils: 'ont' },
-          'être': { je: 'suis', tu: 'es', il: 'est', nous: 'sommes', vous: 'êtes', ils: 'sont' },
+      const VERB_CONJUGATIONS = {
+        'être': {
+          present: { je: 'suis', tu: 'es', il: 'est', nous: 'sommes', vous: 'êtes', ils: 'sont' },
+          imparfait: { je: 'étais', tu: 'étais', il: 'était', nous: 'étions', vous: 'étiez', ils: 'étaient' },
+          futur: { je: 'serai', tu: 'seras', il: 'sera', nous: 'serons', vous: 'serez', ils: 'seront' },
+          passe_compose: { je: 'ai été', tu: 'as été', il: 'a été', nous: 'avons été', vous: 'avez été', ils: 'ont été' },
+          conditionnel: { je: 'serais', tu: 'serais', il: 'serait', nous: 'serions', vous: 'seriez', ils: 'seraient' },
         },
-        imparfait: {
-          'parler': { je: 'parlais', tu: 'parlais', il: 'parlait', nous: 'parlions', vous: 'parliez', ils: 'parlaient' },
-          'finir': { je: 'finissais', tu: 'finissais', il: 'finissait', nous: 'finissions', vous: 'finissiez', ils: 'finissaient' },
-          'aller': { je: 'allais', tu: 'allais', il: 'allait', nous: 'allions', vous: 'alliez', ils: 'allaient' },
-          'avoir': { je: 'avais', tu: 'avais', il: 'avait', nous: 'avions', vous: 'aviez', ils: 'avaient' },
-          'être': { je: 'étais', tu: 'étais', il: 'était', nous: 'étions', vous: 'étiez', ils: 'étaient' },
+        'avoir': {
+          present: { je: 'ai', tu: 'as', il: 'a', nous: 'avons', vous: 'avez', ils: 'ont' },
+          imparfait: { je: 'avais', tu: 'avais', il: 'avait', nous: 'avions', vous: 'aviez', ils: 'avaient' },
+          futur: { je: 'aurai', tu: 'auras', il: 'aura', nous: 'aurons', vous: 'aurez', ils: 'auront' },
+          passe_compose: { je: 'ai eu', tu: 'as eu', il: 'a eu', nous: 'avons eu', vous: 'avez eu', ils: 'ont eu' },
+          conditionnel: { je: 'aurais', tu: 'aurais', il: 'aurait', nous: 'aurions', vous: 'auriez', ils: 'auraient' },
         },
-        futur: {
-          'parler': { je: 'parlerai', tu: 'parleras', il: 'parlera', nous: 'parlerons', vous: 'parlerez', ils: 'parleront' },
-          'finir': { je: 'finirai', tu: 'finiras', il: 'finira', nous: 'finirons', vous: 'finirez', ils: 'finiront' },
-          'aller': { je: 'irai', tu: 'iras', il: 'ira', nous: 'irons', vous: 'irez', ils: 'iront' },
-          'avoir': { je: 'aurai', tu: 'auras', il: 'aura', nous: 'aurons', vous: 'aurez', ils: 'auront' },
-          'être': { je: 'serai', tu: 'seras', il: 'sera', nous: 'serons', vous: 'serez', ils: 'seront' },
+        'aller': {
+          present: { je: 'vais', tu: 'vas', il: 'va', nous: 'allons', vous: 'allez', ils: 'vont' },
+          imparfait: { je: 'allais', tu: 'allais', il: 'allait', nous: 'allions', vous: 'alliez', ils: 'allaient' },
+          futur: { je: 'irai', tu: 'iras', il: 'ira', nous: 'irons', vous: 'irez', ils: 'iront' },
+          passe_compose: { je: 'suis allé', tu: 'es allé', il: 'est allé', nous: 'sommes allés', vous: 'êtes allés', ils: 'sont allés' },
+          conditionnel: { je: 'irais', tu: 'irais', il: 'irait', nous: 'irions', vous: 'iriez', ils: 'iraient' },
         },
-        passe_compose: {
-          'parler': { je: 'ai parlé', tu: 'as parlé', il: 'a parlé', nous: 'avons parlé', vous: 'avez parlé', ils: 'ont parlé' },
-          'finir': { je: 'ai fini', tu: 'as fini', il: 'a fini', nous: 'avons fini', vous: 'avez fini', ils: 'ont fini' },
-          'aller': { je: 'suis allé', tu: 'es allé', il: 'est allé', nous: 'sommes allés', vous: 'êtes allés', ils: 'sont allés' },
-          'avoir': { je: 'ai eu', tu: 'as eu', il: 'a eu', nous: 'avons eu', vous: 'avez eu', ils: 'ont eu' },
-          'être': { je: 'ai été', tu: 'as été', il: 'a été', nous: 'avons été', vous: 'avez été', ils: 'ont été' },
+        'faire': {
+          present: { je: 'fais', tu: 'fais', il: 'fait', nous: 'faisons', vous: 'faites', ils: 'font' },
+          imparfait: { je: 'faisais', tu: 'faisais', il: 'faisait', nous: 'faisions', vous: 'faisiez', ils: 'faisaient' },
+          futur: { je: 'ferai', tu: 'feras', il: 'fera', nous: 'ferons', vous: 'ferez', ils: 'feront' },
+          passe_compose: { je: 'ai fait', tu: 'as fait', il: 'a fait', nous: 'avons fait', vous: 'avez fait', ils: 'ont fait' },
+          conditionnel: { je: 'ferais', tu: 'ferais', il: 'ferait', nous: 'ferions', vous: 'feriez', ils: 'feraient' },
         },
-        conditionnel: {
-          'parler': { je: 'parlerais', tu: 'parlerais', il: 'parlerait', nous: 'parlerions', vous: 'parleriez', ils: 'parleraient' },
-          'finir': { je: 'finirais', tu: 'finirais', il: 'finirait', nous: 'finirions', vous: 'finiriez', ils: 'finiraient' },
-          'aller': { je: 'irais', tu: 'irais', il: 'irait', nous: 'irions', vous: 'iriez', ils: 'iraient' },
-          'avoir': { je: 'aurais', tu: 'aurais', il: 'aurait', nous: 'aurions', vous: 'auriez', ils: 'auraient' },
-          'être': { je: 'serais', tu: 'serais', il: 'serait', nous: 'serions', vous: 'seriez', ils: 'seraient' },
+        'dire': {
+          present: { je: 'dis', tu: 'dis', il: 'dit', nous: 'disons', vous: 'dites', ils: 'disent' },
+          imparfait: { je: 'disais', tu: 'disais', il: 'disait', nous: 'disions', vous: 'disiez', ils: 'disaient' },
+          futur: { je: 'dirai', tu: 'diras', il: 'dira', nous: 'dirons', vous: 'direz', ils: 'diront' },
+          passe_compose: { je: 'ai dit', tu: 'as dit', il: 'a dit', nous: 'avons dit', vous: 'avez dit', ils: 'ont dit' },
+          conditionnel: { je: 'dirais', tu: 'dirais', il: 'dirait', nous: 'dirions', vous: 'diriez', ils: 'diraient' },
+        },
+        'pouvoir': {
+          present: { je: 'peux', tu: 'peux', il: 'peut', nous: 'pouvons', vous: 'pouvez', ils: 'peuvent' },
+          imparfait: { je: 'pouvais', tu: 'pouvais', il: 'pouvait', nous: 'pouvions', vous: 'pouviez', ils: 'pouvaient' },
+          futur: { je: 'pourrai', tu: 'pourras', il: 'pourra', nous: 'pourrons', vous: 'pourrez', ils: 'pourront' },
+          passe_compose: { je: 'ai pu', tu: 'as pu', il: 'a pu', nous: 'avons pu', vous: 'avez pu', ils: 'ont pu' },
+          conditionnel: { je: 'pourrais', tu: 'pourrais', il: 'pourrait', nous: 'pourrions', vous: 'pourriez', ils: 'pourraient' },
+        },
+        'vouloir': {
+          present: { je: 'veux', tu: 'veux', il: 'veut', nous: 'voulons', vous: 'voulez', ils: 'veulent' },
+          imparfait: { je: 'voulais', tu: 'voulais', il: 'voulait', nous: 'voulions', vous: 'vouliez', ils: 'voulaient' },
+          futur: { je: 'voudrai', tu: 'voudras', il: 'voudra', nous: 'voudrons', vous: 'voudrez', ils: 'voudront' },
+          passe_compose: { je: 'ai voulu', tu: 'as voulu', il: 'a voulu', nous: 'avons voulu', vous: 'avez voulu', ils: 'ont voulu' },
+          conditionnel: { je: 'voudrais', tu: 'voudrais', il: 'voudrait', nous: 'voudrions', vous: 'voudriez', ils: 'voudraient' },
+        },
+        'devoir': {
+          present: { je: 'dois', tu: 'dois', il: 'doit', nous: 'devons', vous: 'devez', ils: 'doivent' },
+          imparfait: { je: 'devais', tu: 'devais', il: 'devait', nous: 'devions', vous: 'deviez', ils: 'devaient' },
+          futur: { je: 'devrai', tu: 'devras', il: 'devra', nous: 'devrons', vous: 'devrez', ils: 'devront' },
+          passe_compose: { je: 'ai dû', tu: 'as dû', il: 'a dû', nous: 'avons dû', vous: 'avez dû', ils: 'ont dû' },
+          conditionnel: { je: 'devrais', tu: 'devrais', il: 'devrait', nous: 'devrions', vous: 'devriez', ils: 'devraient' },
+        },
+        'savoir': {
+          present: { je: 'sais', tu: 'sais', il: 'sait', nous: 'savons', vous: 'savez', ils: 'savent' },
+          imparfait: { je: 'savais', tu: 'savais', il: 'savait', nous: 'savions', vous: 'saviez', ils: 'savaient' },
+          futur: { je: 'saurai', tu: 'sauras', il: 'saura', nous: 'saurons', vous: 'saurez', ils: 'sauront' },
+          passe_compose: { je: 'ai su', tu: 'as su', il: 'a su', nous: 'avons su', vous: 'avez su', ils: 'ont su' },
+          conditionnel: { je: 'saurais', tu: 'saurais', il: 'saurait', nous: 'saurions', vous: 'sauriez', ils: 'sauraient' },
+        },
+        'venir': {
+          present: { je: 'viens', tu: 'viens', il: 'vient', nous: 'venons', vous: 'venez', ils: 'viennent' },
+          imparfait: { je: 'venais', tu: 'venais', il: 'venait', nous: 'venions', vous: 'veniez', ils: 'venaient' },
+          futur: { je: 'viendrai', tu: 'viendras', il: 'viendra', nous: 'viendrons', vous: 'viendrez', ils: 'viendront' },
+          passe_compose: { je: 'suis venu', tu: 'es venu', il: 'est venu', nous: 'sommes venus', vous: 'êtes venus', ils: 'sont venus' },
+          conditionnel: { je: 'viendrais', tu: 'viendrais', il: 'viendrait', nous: 'viendrions', vous: 'viendriez', ils: 'viendraient' },
+        },
+        'prendre': {
+          present: { je: 'prends', tu: 'prends', il: 'prend', nous: 'prenons', vous: 'prenez', ils: 'prennent' },
+          imparfait: { je: 'prenais', tu: 'prenais', il: 'prenait', nous: 'prenions', vous: 'preniez', ils: 'prenaient' },
+          futur: { je: 'prendrai', tu: 'prendras', il: 'prendra', nous: 'prendrons', vous: 'prendrez', ils: 'prendront' },
+          passe_compose: { je: 'ai pris', tu: 'as pris', il: 'a pris', nous: 'avons pris', vous: 'avez pris', ils: 'ont pris' },
+          conditionnel: { je: 'prendrais', tu: 'prendrais', il: 'prendrait', nous: 'prendrions', vous: 'prendriez', ils: 'prendraient' },
+        },
+        'mettre': {
+          present: { je: 'mets', tu: 'mets', il: 'met', nous: 'mettons', vous: 'mettez', ils: 'mettent' },
+          imparfait: { je: 'mettais', tu: 'mettais', il: 'mettait', nous: 'mettions', vous: 'mettiez', ils: 'mettaient' },
+          futur: { je: 'mettrai', tu: 'mettras', il: 'mettra', nous: 'mettrons', vous: 'mettrez', ils: 'mettront' },
+          passe_compose: { je: 'ai mis', tu: 'as mis', il: 'a mis', nous: 'avons mis', vous: 'avez mis', ils: 'ont mis' },
+          conditionnel: { je: 'mettrais', tu: 'mettrais', il: 'mettrait', nous: 'mettrions', vous: 'mettriez', ils: 'mettraient' },
+        },
+        'donner': {
+          present: { je: 'donne', tu: 'donnes', il: 'donne', nous: 'donnons', vous: 'donnez', ils: 'donnent' },
+          imparfait: { je: 'donnais', tu: 'donnais', il: 'donnait', nous: 'donnions', vous: 'donniez', ils: 'donnaient' },
+          futur: { je: 'donnerai', tu: 'donneras', il: 'donnera', nous: 'donnerons', vous: 'donnerez', ils: 'donneront' },
+          passe_compose: { je: 'ai donné', tu: 'as donné', il: 'a donné', nous: 'avons donné', vous: 'avez donné', ils: 'ont donné' },
+          conditionnel: { je: 'donnerais', tu: 'donnerais', il: 'donnerait', nous: 'donnerions', vous: 'donneriez', ils: 'donneraient' },
+        },
+        'parler': {
+          present: { je: 'parle', tu: 'parles', il: 'parle', nous: 'parlons', vous: 'parlez', ils: 'parlent' },
+          imparfait: { je: 'parlais', tu: 'parlais', il: 'parlait', nous: 'parlions', vous: 'parliez', ils: 'parlaient' },
+          futur: { je: 'parlerai', tu: 'parleras', il: 'parlera', nous: 'parlerons', vous: 'parlerez', ils: 'parleront' },
+          passe_compose: { je: 'ai parlé', tu: 'as parlé', il: 'a parlé', nous: 'avons parlé', vous: 'avez parlé', ils: 'ont parlé' },
+          conditionnel: { je: 'parlerais', tu: 'parlerais', il: 'parlerait', nous: 'parlerions', vous: 'parleriez', ils: 'parleraient' },
+        },
+        'aimer': {
+          present: { je: 'aime', tu: 'aimes', il: 'aime', nous: 'aimons', vous: 'aimez', ils: 'aiment' },
+          imparfait: { je: 'aimais', tu: 'aimais', il: 'aimait', nous: 'aimions', vous: 'aimiez', ils: 'aimaient' },
+          futur: { je: 'aimerai', tu: 'aimeras', il: 'aimera', nous: 'aimerons', vous: 'aimerez', ils: 'aimeront' },
+          passe_compose: { je: 'ai aimé', tu: 'as aimé', il: 'a aimé', nous: 'avons aimé', vous: 'avez aimé', ils: 'ont aimé' },
+          conditionnel: { je: 'aimerais', tu: 'aimerais', il: 'aimerait', nous: 'aimerions', vous: 'aimeriez', ils: 'aimeraient' },
+        },
+        'travailler': {
+          present: { je: 'travaille', tu: 'travailles', il: 'travaille', nous: 'travaillons', vous: 'travaillez', ils: 'travaillent' },
+          imparfait: { je: 'travaillais', tu: 'travaillais', il: 'travaillait', nous: 'travaillions', vous: 'travailliez', ils: 'travaillaient' },
+          futur: { je: 'travaillerai', tu: 'travailleras', il: 'travaillera', nous: 'travaillerons', vous: 'travaillerez', ils: 'travailleront' },
+          passe_compose: { je: 'ai travaillé', tu: 'as travaillé', il: 'a travaillé', nous: 'avons travaillé', vous: 'avez travaillé', ils: 'ont travaillé' },
+          conditionnel: { je: 'travaillerais', tu: 'travaillerais', il: 'travaillerait', nous: 'travaillerions', vous: 'travailleriez', ils: 'travailleraient' },
+        },
+        'habiter': {
+          present: { je: 'habite', tu: 'habites', il: 'habite', nous: 'habitons', vous: 'habitez', ils: 'habitent' },
+          imparfait: { je: 'habitais', tu: 'habitais', il: 'habitait', nous: 'habitions', vous: 'habitiez', ils: 'habitaient' },
+          futur: { je: 'habiterai', tu: 'habiteras', il: 'habitera', nous: 'habiterons', vous: 'habiterez', ils: 'habiteront' },
+          passe_compose: { je: 'ai habité', tu: 'as habité', il: 'a habité', nous: 'avons habité', vous: 'avez habité', ils: 'ont habité' },
+          conditionnel: { je: 'habiterais', tu: 'habiterais', il: 'habiterait', nous: 'habiterions', vous: 'habiteriez', ils: 'habiteraient' },
+        },
+        'regarder': {
+          present: { je: 'regarde', tu: 'regardes', il: 'regarde', nous: 'regardons', vous: 'regardez', ils: 'regardent' },
+          imparfait: { je: 'regardais', tu: 'regardais', il: 'regardait', nous: 'regardions', vous: 'regardiez', ils: 'regardaient' },
+          futur: { je: 'regarderai', tu: 'regarderas', il: 'regardera', nous: 'regarderons', vous: 'regarderez', ils: 'regarderont' },
+          passe_compose: { je: 'ai regardé', tu: 'as regardé', il: 'a regardé', nous: 'avons regardé', vous: 'avez regardé', ils: 'ont regardé' },
+          conditionnel: { je: 'regarderais', tu: 'regarderais', il: 'regarderait', nous: 'regarderions', vous: 'regarderiez', ils: 'regarderaient' },
+        },
+        'écouter': {
+          present: { je: 'écoute', tu: 'écoutes', il: 'écoute', nous: 'écoutons', vous: 'écoutez', ils: 'écoutent' },
+          imparfait: { je: 'écoutais', tu: 'écoutais', il: 'écoutait', nous: 'écoutions', vous: 'écoutiez', ils: 'écoutaient' },
+          futur: { je: 'écouterai', tu: 'écouteras', il: 'écoutera', nous: 'écouterons', vous: 'écouterez', ils: 'écouteront' },
+          passe_compose: { je: 'ai écouté', tu: 'as écouté', il: 'a écouté', nous: 'avons écouté', vous: 'avez écouté', ils: 'ont écouté' },
+          conditionnel: { je: 'écouterais', tu: 'écouterais', il: 'écouterait', nous: 'écouterions', vous: 'écouteriez', ils: 'écouteraient' },
+        },
+        'manger': {
+          present: { je: 'mange', tu: 'manges', il: 'mange', nous: 'mangeons', vous: 'mangez', ils: 'mangent' },
+          imparfait: { je: 'mangeais', tu: 'mangeais', il: 'mangeait', nous: 'mangions', vous: 'mangiez', ils: 'mangeaient' },
+          futur: { je: 'mangerai', tu: 'mangeras', il: 'mangera', nous: 'mangerons', vous: 'mangerez', ils: 'mangeront' },
+          passe_compose: { je: 'ai mangé', tu: 'as mangé', il: 'a mangé', nous: 'avons mangé', vous: 'avez mangé', ils: 'ont mangé' },
+          conditionnel: { je: 'mangerais', tu: 'mangerais', il: 'mangerait', nous: 'mangerions', vous: 'mangeriez', ils: 'mangeraient' },
+        },
+        'boire': {
+          present: { je: 'bois', tu: 'bois', il: 'boit', nous: 'buvons', vous: 'buvez', ils: 'boivent' },
+          imparfait: { je: 'buvais', tu: 'buvais', il: 'buvait', nous: 'buvions', vous: 'buviez', ils: 'buvaient' },
+          futur: { je: 'boirai', tu: 'boiras', il: 'boira', nous: 'boirons', vous: 'boirez', ils: 'boiront' },
+          passe_compose: { je: 'ai bu', tu: 'as bu', il: 'a bu', nous: 'avons bu', vous: 'avez bu', ils: 'ont bu' },
+          conditionnel: { je: 'boirais', tu: 'boirais', il: 'boirait', nous: 'boirions', vous: 'boiriez', ils: 'boiraient' },
+        },
+        'arriver': {
+          present: { je: 'arrive', tu: 'arrives', il: 'arrive', nous: 'arrivons', vous: 'arrivez', ils: 'arrivent' },
+          imparfait: { je: 'arrivais', tu: 'arrivais', il: 'arrivait', nous: 'arrivions', vous: 'arriviez', ils: 'arrivaient' },
+          futur: { je: 'arriverai', tu: 'arriveras', il: 'arrivera', nous: 'arriverons', vous: 'arriverez', ils: 'arriveront' },
+          passe_compose: { je: 'suis arrivé', tu: 'es arrivé', il: 'est arrivé', nous: 'sommes arrivés', vous: 'êtes arrivés', ils: 'sont arrivés' },
+          conditionnel: { je: 'arriverais', tu: 'arriverais', il: 'arriverait', nous: 'arriverions', vous: 'arriveriez', ils: 'arriveraient' },
+        },
+        'entrer': {
+          present: { je: 'entre', tu: 'entres', il: 'entre', nous: 'entrons', vous: 'entrez', ils: 'entrent' },
+          imparfait: { je: 'entrais', tu: 'entrais', il: 'entrait', nous: 'entrions', vous: 'entriez', ils: 'entraient' },
+          futur: { je: 'entrerai', tu: 'entreras', il: 'entrera', nous: 'entrerons', vous: 'entrerez', ils: 'entreront' },
+          passe_compose: { je: 'suis entré', tu: 'es entré', il: 'est entré', nous: 'sommes entrés', vous: 'êtes entrés', ils: 'sont entrés' },
+          conditionnel: { je: 'entrerais', tu: 'entrerais', il: 'entrerait', nous: 'entrerions', vous: 'entreriez', ils: 'entreraient' },
+        },
+        'sortir': {
+          present: { je: 'sors', tu: 'sors', il: 'sort', nous: 'sortons', vous: 'sortez', ils: 'sortent' },
+          imparfait: { je: 'sortais', tu: 'sortais', il: 'sortait', nous: 'sortions', vous: 'sortiez', ils: 'sortaient' },
+          futur: { je: 'sortirai', tu: 'sortiras', il: 'sortira', nous: 'sortirons', vous: 'sortirez', ils: 'sortiront' },
+          passe_compose: { je: 'suis sorti', tu: 'es sorti', il: 'est sorti', nous: 'sommes sortis', vous: 'êtes sortis', ils: 'sont sortis' },
+          conditionnel: { je: 'sortirais', tu: 'sortirais', il: 'sortirait', nous: 'sortirions', vous: 'sortiriez', ils: 'sortiraient' },
+        },
+        'partir': {
+          present: { je: 'pars', tu: 'pars', il: 'part', nous: 'partons', vous: 'partez', ils: 'partent' },
+          imparfait: { je: 'partais', tu: 'partais', il: 'partait', nous: 'partions', vous: 'partiez', ils: 'partaient' },
+          futur: { je: 'partirai', tu: 'partiras', il: 'partira', nous: 'partirons', vous: 'partirez', ils: 'partiront' },
+          passe_compose: { je: 'suis parti', tu: 'es parti', il: 'est parti', nous: 'sommes partis', vous: 'êtes partis', ils: 'sont partis' },
+          conditionnel: { je: 'partirais', tu: 'partirais', il: 'partirait', nous: 'partirions', vous: 'partiriez', ils: 'partiraient' },
+        },
+        'rentrer': {
+          present: { je: 'rentre', tu: 'rentres', il: 'rentre', nous: 'rentrons', vous: 'rentrez', ils: 'rentrent' },
+          imparfait: { je: 'rentrais', tu: 'rentrais', il: 'rentrait', nous: 'rentrions', vous: 'rentriez', ils: 'rentraient' },
+          futur: { je: 'rentrerai', tu: 'rentreras', il: 'rentrera', nous: 'rentrerons', vous: 'rentrerez', ils: 'rentreront' },
+          passe_compose: { je: 'suis rentré', tu: 'es rentré', il: 'est rentré', nous: 'sommes rentrés', vous: 'êtes rentrés', ils: 'sont rentrés' },
+          conditionnel: { je: 'rentrerais', tu: 'rentrerais', il: 'rentrerait', nous: 'rentrerions', vous: 'rentreriez', ils: 'rentreraient' },
+        },
+        'rester': {
+          present: { je: 'reste', tu: 'restes', il: 'reste', nous: 'restons', vous: 'restez', ils: 'restent' },
+          imparfait: { je: 'restais', tu: 'restais', il: 'restait', nous: 'restions', vous: 'restiez', ils: 'restaient' },
+          futur: { je: 'resterai', tu: 'resteras', il: 'restera', nous: 'resterons', vous: 'resterez', ils: 'resteront' },
+          passe_compose: { je: 'suis resté', tu: 'es resté', il: 'est resté', nous: 'sommes restés', vous: 'êtes restés', ils: 'sont restés' },
+          conditionnel: { je: 'resterais', tu: 'resterais', il: 'resterait', nous: 'resterions', vous: 'resteriez', ils: 'resteraient' },
+        },
+        'monter': {
+          present: { je: 'monte', tu: 'montes', il: 'monte', nous: 'montons', vous: 'montez', ils: 'montent' },
+          imparfait: { je: 'montais', tu: 'montais', il: 'montait', nous: 'montions', vous: 'montiez', ils: 'montaient' },
+          futur: { je: 'monterai', tu: 'monteras', il: 'montera', nous: 'monterons', vous: 'monterez', ils: 'monteront' },
+          passe_compose: { je: 'suis monté', tu: 'es monté', il: 'est monté', nous: 'sommes montés', vous: 'êtes montés', ils: 'sont montés' },
+          conditionnel: { je: 'monterais', tu: 'monterais', il: 'monterait', nous: 'monterions', vous: 'monteriez', ils: 'monteraient' },
+        },
+        'descendre': {
+          present: { je: 'descends', tu: 'descends', il: 'descend', nous: 'descendons', vous: 'descendez', ils: 'descendent' },
+          imparfait: { je: 'descendais', tu: 'descendais', il: 'descendait', nous: 'descendions', vous: 'descendiez', ils: 'descendaient' },
+          futur: { je: 'descendrai', tu: 'descendras', il: 'descendra', nous: 'descendrons', vous: 'descendrez', ils: 'descendront' },
+          passe_compose: { je: 'suis descendu', tu: 'es descendu', il: 'est descendu', nous: 'sommes descendus', vous: 'êtes descendus', ils: 'sont descendus' },
+          conditionnel: { je: 'descendrais', tu: 'descendrais', il: 'descendrait', nous: 'descendrions', vous: 'descendriez', ils: 'descendraient' },
+        },
+        'passer': {
+          present: { je: 'passe', tu: 'passes', il: 'passe', nous: 'passons', vous: 'passez', ils: 'passent' },
+          imparfait: { je: 'passais', tu: 'passais', il: 'passait', nous: 'passions', vous: 'passiez', ils: 'passaient' },
+          futur: { je: 'passerai', tu: 'passeras', il: 'passera', nous: 'passerons', vous: 'passerez', ils: 'passeront' },
+          passe_compose: { je: 'suis passé', tu: 'es passé', il: 'est passé', nous: 'sommes passés', vous: 'êtes passés', ils: 'sont passés' },
+          conditionnel: { je: 'passerais', tu: 'passerais', il: 'passerait', nous: 'passerions', vous: 'passeriez', ils: 'passeraient' },
+        },
+        'acheter': {
+          present: { je: 'achète', tu: 'achètes', il: 'achète', nous: 'achetons', vous: 'achetez', ils: 'achètent' },
+          imparfait: { je: 'achetais', tu: 'achetais', il: 'achetait', nous: 'achetions', vous: 'achetiez', ils: 'achetaient' },
+          futur: { je: 'achèterai', tu: 'achèteras', il: 'achètera', nous: 'achèterons', vous: 'achèterez', ils: 'achèteront' },
+          passe_compose: { je: 'ai acheté', tu: 'as acheté', il: 'a acheté', nous: 'avons acheté', vous: 'avez acheté', ils: 'ont acheté' },
+          conditionnel: { je: 'achèterais', tu: 'achèterais', il: 'achèterait', nous: 'achèterions', vous: 'achèteriez', ils: 'achèteraient' },
+        },
+        'payer': {
+          present: { je: 'paie', tu: 'paies', il: 'paie', nous: 'payons', vous: 'payez', ils: 'paient' },
+          imparfait: { je: 'payais', tu: 'payais', il: 'payait', nous: 'payions', vous: 'payiez', ils: 'payaient' },
+          futur: { je: 'paierai', tu: 'paieras', il: 'paiera', nous: 'paierons', vous: 'paierez', ils: 'paieront' },
+          passe_compose: { je: 'ai payé', tu: 'as payé', il: 'a payé', nous: 'avons payé', vous: 'avez payé', ils: 'ont payé' },
+          conditionnel: { je: 'paierais', tu: 'paierais', il: 'paierait', nous: 'paierions', vous: 'paieriez', ils: 'paieraient' },
+        },
+        'choisir': {
+          present: { je: 'choisis', tu: 'choisis', il: 'choisit', nous: 'choisissons', vous: 'choisissez', ils: 'choisissent' },
+          imparfait: { je: 'choisissais', tu: 'choisissais', il: 'choisissait', nous: 'choisissions', vous: 'choisissiez', ils: 'choisissaient' },
+          futur: { je: 'choisirai', tu: 'choisiras', il: 'choisira', nous: 'choisirons', vous: 'choisirez', ils: 'choisiront' },
+          passe_compose: { je: 'ai choisi', tu: 'as choisi', il: 'a choisi', nous: 'avons choisi', vous: 'avez choisi', ils: 'ont choisi' },
+          conditionnel: { je: 'choisirais', tu: 'choisirais', il: 'choisirait', nous: 'choisirions', vous: 'choisiriez', ils: 'choisiraient' },
+        },
+        'finir': {
+          present: { je: 'finis', tu: 'finis', il: 'finit', nous: 'finissons', vous: 'finissez', ils: 'finissent' },
+          imparfait: { je: 'finissais', tu: 'finissais', il: 'finissait', nous: 'finissions', vous: 'finissiez', ils: 'finissaient' },
+          futur: { je: 'finirai', tu: 'finiras', il: 'finira', nous: 'finirons', vous: 'finirez', ils: 'finiront' },
+          passe_compose: { je: 'ai fini', tu: 'as fini', il: 'a fini', nous: 'avons fini', vous: 'avez fini', ils: 'ont fini' },
+          conditionnel: { je: 'finirais', tu: 'finirais', il: 'finirait', nous: 'finirions', vous: 'finiriez', ils: 'finiraient' },
+        },
+        'comprendre': {
+          present: { je: 'comprends', tu: 'comprends', il: 'comprend', nous: 'comprenons', vous: 'comprenez', ils: 'comprennent' },
+          imparfait: { je: 'comprenais', tu: 'comprenais', il: 'comprenait', nous: 'comprenions', vous: 'compreniez', ils: 'comprenaient' },
+          futur: { je: 'comprendrai', tu: 'comprendras', il: 'comprendra', nous: 'comprendrons', vous: 'comprendrez', ils: 'comprendront' },
+          passe_compose: { je: 'ai compris', tu: 'as compris', il: 'a compris', nous: 'avons compris', vous: 'avez compris', ils: 'ont compris' },
+          conditionnel: { je: 'comprendrais', tu: 'comprendrais', il: 'comprendrait', nous: 'comprendrions', vous: 'comprendriez', ils: 'comprendraient' },
+        },
+        'apprendre': {
+          present: { je: 'apprends', tu: 'apprends', il: 'apprend', nous: 'apprenons', vous: 'apprenez', ils: 'apprennent' },
+          imparfait: { je: 'apprenais', tu: 'apprenais', il: 'apprenait', nous: 'apprenions', vous: 'appreniez', ils: 'apprenaient' },
+          futur: { je: 'apprendrai', tu: 'apprendras', il: 'apprendra', nous: 'apprendrons', vous: 'apprendrez', ils: 'apprendront' },
+          passe_compose: { je: 'ai appris', tu: 'as appris', il: 'a appris', nous: 'avons appris', vous: 'avez appris', ils: 'ont appris' },
+          conditionnel: { je: 'apprendrais', tu: 'apprendrais', il: 'apprendrait', nous: 'apprendrions', vous: 'apprendriez', ils: 'apprendraient' },
+        },
+        'écrire': {
+          present: { je: 'écris', tu: 'écris', il: 'écrit', nous: 'écrivons', vous: 'écrivez', ils: 'écrivent' },
+          imparfait: { je: 'écrivais', tu: 'écrivais', il: 'écrivait', nous: 'écrivions', vous: 'écriviez', ils: 'écrivaient' },
+          futur: { je: 'écrirai', tu: 'écriras', il: 'écrira', nous: 'écrirons', vous: 'écrirez', ils: 'écriront' },
+          passe_compose: { je: 'ai écrit', tu: 'as écrit', il: 'a écrit', nous: 'avons écrit', vous: 'avez écrit', ils: 'ont écrit' },
+          conditionnel: { je: 'écrirais', tu: 'écrirais', il: 'écrirait', nous: 'écririons', vous: 'écririez', ils: 'écriraient' },
+        },
+        'lire': {
+          present: { je: 'lis', tu: 'lis', il: 'lit', nous: 'lisons', vous: 'lisez', ils: 'lisent' },
+          imparfait: { je: 'lisais', tu: 'lisais', il: 'lisait', nous: 'lisions', vous: 'lisiez', ils: 'lisaient' },
+          futur: { je: 'lirai', tu: 'liras', il: 'lira', nous: 'lirons', vous: 'lirez', ils: 'liront' },
+          passe_compose: { je: 'ai lu', tu: 'as lu', il: 'a lu', nous: 'avons lu', vous: 'avez lu', ils: 'ont lu' },
+          conditionnel: { je: 'lirais', tu: 'lirais', il: 'lirait', nous: 'lirions', vous: 'liriez', ils: 'liraient' },
+        },
+        'ouvrir': {
+          present: { je: 'ouvre', tu: 'ouvres', il: 'ouvre', nous: 'ouvrons', vous: 'ouvrez', ils: 'ouvrent' },
+          imparfait: { je: 'ouvrais', tu: 'ouvrais', il: 'ouvrait', nous: 'ouvrions', vous: 'ouvriez', ils: 'ouvraient' },
+          futur: { je: 'ouvrirai', tu: 'ouvriras', il: 'ouvrira', nous: 'ouvrirons', vous: 'ouvrirez', ils: 'ouvriront' },
+          passe_compose: { je: 'ai ouvert', tu: 'as ouvert', il: 'a ouvert', nous: 'avons ouvert', vous: 'avez ouvert', ils: 'ont ouvert' },
+          conditionnel: { je: 'ouvrirais', tu: 'ouvrirais', il: 'ouvrirait', nous: 'ouvririons', vous: 'ouvririez', ils: 'ouvriraient' },
+        },
+        'fermer': {
+          present: { je: 'ferme', tu: 'fermes', il: 'ferme', nous: 'fermons', vous: 'fermez', ils: 'ferment' },
+          imparfait: { je: 'fermais', tu: 'fermais', il: 'fermait', nous: 'fermions', vous: 'fermiez', ils: 'fermaient' },
+          futur: { je: 'fermerai', tu: 'fermeras', il: 'fermera', nous: 'fermerons', vous: 'fermerez', ils: 'fermeront' },
+          passe_compose: { je: 'ai fermé', tu: 'as fermé', il: 'a fermé', nous: 'avons fermé', vous: 'avez fermé', ils: 'ont fermé' },
+          conditionnel: { je: 'fermerais', tu: 'fermerais', il: 'fermerait', nous: 'fermerions', vous: 'fermeriez', ils: 'fermeraient' },
+        },
+        'dormir': {
+          present: { je: 'dors', tu: 'dors', il: 'dort', nous: 'dormons', vous: 'dormez', ils: 'dorment' },
+          imparfait: { je: 'dormais', tu: 'dormais', il: 'dormait', nous: 'dormions', vous: 'dormiez', ils: 'dormaient' },
+          futur: { je: 'dormirai', tu: 'dormiras', il: 'dormira', nous: 'dormirons', vous: 'dormirez', ils: 'dormiront' },
+          passe_compose: { je: 'ai dormi', tu: 'as dormi', il: 'a dormi', nous: 'avons dormi', vous: 'avez dormi', ils: 'ont dormi' },
+          conditionnel: { je: 'dormirais', tu: 'dormirais', il: 'dormirait', nous: 'dormirions', vous: 'dormiriez', ils: 'dormiraient' },
+        },
+        'se lever': {
+          present: { je: 'me lève', tu: 'te lèves', il: 'se lève', nous: 'nous levons', vous: 'vous levez', ils: 'se lèvent' },
+          imparfait: { je: 'me levais', tu: 'te levais', il: 'se levait', nous: 'nous levions', vous: 'vous leviez', ils: 'se levaient' },
+          futur: { je: 'me lèverai', tu: 'te lèveras', il: 'se lèvera', nous: 'nous lèverons', vous: 'vous lèverez', ils: 'se lèveront' },
+          passe_compose: { je: 'me suis levé', tu: "t'es levé", il: "s'est levé", nous: 'nous sommes levés', vous: 'vous êtes levés', ils: 'se sont levés' },
+          conditionnel: { je: 'me lèverais', tu: 'te lèverais', il: 'se lèverait', nous: 'nous lèverions', vous: 'vous lèveriez', ils: 'se lèveraient' },
+        },
+        'se coucher': {
+          present: { je: 'me couche', tu: 'te couches', il: 'se couche', nous: 'nous couchons', vous: 'vous couchez', ils: 'se couchent' },
+          imparfait: { je: 'me couchais', tu: 'te couchais', il: 'se couchait', nous: 'nous couchions', vous: 'vous couchiez', ils: 'se couchaient' },
+          futur: { je: 'me coucherai', tu: 'te coucheras', il: 'se couchera', nous: 'nous coucherons', vous: 'vous coucherez', ils: 'se coucheront' },
+          passe_compose: { je: 'me suis couché', tu: "t'es couché", il: "s'est couché", nous: 'nous sommes couchés', vous: 'vous êtes couchés', ils: 'se sont couchés' },
+          conditionnel: { je: 'me coucherais', tu: 'te coucherais', il: 'se coucherait', nous: 'nous coucherions', vous: 'vous coucheriez', ils: 'se coucheraient' },
+        },
+        'se réveiller': {
+          present: { je: 'me réveille', tu: 'te réveilles', il: 'se réveille', nous: 'nous réveillons', vous: 'vous réveillez', ils: 'se réveillent' },
+          imparfait: { je: 'me réveillais', tu: 'te réveillais', il: 'se réveillait', nous: 'nous réveillions', vous: 'vous réveilliez', ils: 'se réveillaient' },
+          futur: { je: 'me réveillerai', tu: 'te réveilleras', il: 'se réveillera', nous: 'nous réveillerons', vous: 'vous réveillerez', ils: 'se réveilleront' },
+          passe_compose: { je: 'me suis réveillé', tu: "t'es réveillé", il: "s'est réveillé", nous: 'nous sommes réveillés', vous: 'vous êtes réveillés', ils: 'se sont réveillés' },
+          conditionnel: { je: 'me réveillerais', tu: 'te réveillerais', il: 'se réveillerait', nous: 'nous réveillerions', vous: 'vous réveilleriez', ils: 'se réveilleraient' },
+        },
+        'se laver': {
+          present: { je: 'me lave', tu: 'te laves', il: 'se lave', nous: 'nous lavons', vous: 'vous lavez', ils: 'se lavent' },
+          imparfait: { je: 'me lavais', tu: 'te lavais', il: 'se lavait', nous: 'nous lavions', vous: 'vous laviez', ils: 'se lavaient' },
+          futur: { je: 'me laverai', tu: 'te laveras', il: 'se lavera', nous: 'nous laverons', vous: 'vous laverez', ils: 'se laveront' },
+          passe_compose: { je: 'me suis lavé', tu: "t'es lavé", il: "s'est lavé", nous: 'nous sommes lavés', vous: 'vous êtes lavés', ils: 'se sont lavés' },
+          conditionnel: { je: 'me laverais', tu: 'te laverais', il: 'se laverait', nous: 'nous laverions', vous: 'vous laveriez', ils: 'se laveraient' },
+        },
+        "s'habiller": {
+          present: { je: "m'habille", tu: "t'habilles", il: "s'habille", nous: 'nous habillons', vous: 'vous habillez', ils: "s'habillent" },
+          imparfait: { je: "m'habillais", tu: "t'habillais", il: "s'habillait", nous: 'nous habillions', vous: 'vous habilliez', ils: "s'habillaient" },
+          futur: { je: "m'habillerai", tu: "t'habilleras", il: "s'habillera", nous: 'nous habillerons', vous: 'vous habillerez', ils: "s'habilleront" },
+          passe_compose: { je: "me suis habillé", tu: "t'es habillé", il: "s'est habillé", nous: 'nous sommes habillés', vous: 'vous êtes habillés', ils: "se sont habillés" },
+          conditionnel: { je: "m'habillerais", tu: "t'habillerais", il: "s'habillerait", nous: 'nous habillerions', vous: 'vous habilleriez', ils: "s'habilleraient" },
+        },
+        'attendre': {
+          present: { je: 'attends', tu: 'attends', il: 'attend', nous: 'attendons', vous: 'attendez', ils: 'attendent' },
+          imparfait: { je: 'attendais', tu: 'attendais', il: 'attendait', nous: 'attendions', vous: 'attendiez', ils: 'attendaient' },
+          futur: { je: 'attendrai', tu: 'attendras', il: 'attendra', nous: 'attendrons', vous: 'attendrez', ils: 'attendront' },
+          passe_compose: { je: 'ai attendu', tu: 'as attendu', il: 'a attendu', nous: 'avons attendu', vous: 'avez attendu', ils: 'ont attendu' },
+          conditionnel: { je: 'attendrais', tu: 'attendrais', il: 'attendrait', nous: 'attendrions', vous: 'attendriez', ils: 'attendraient' },
+        },
+        'commencer': {
+          present: { je: 'commence', tu: 'commences', il: 'commence', nous: 'commençons', vous: 'commencez', ils: 'commencent' },
+          imparfait: { je: 'commençais', tu: 'commençais', il: 'commençait', nous: 'commencions', vous: 'commenciez', ils: 'commençaient' },
+          futur: { je: 'commencerai', tu: 'commenceras', il: 'commencera', nous: 'commencerons', vous: 'commencerez', ils: 'commenceront' },
+          passe_compose: { je: 'ai commencé', tu: 'as commencé', il: 'a commencé', nous: 'avons commencé', vous: 'avez commencé', ils: 'ont commencé' },
+          conditionnel: { je: 'commencerais', tu: 'commencerais', il: 'commencerait', nous: 'commencerions', vous: 'commenceriez', ils: 'commenceraient' },
+        },
+        'réussir': {
+          present: { je: 'réussis', tu: 'réussis', il: 'réussit', nous: 'réussissons', vous: 'réussissez', ils: 'réussissent' },
+          imparfait: { je: 'réussissais', tu: 'réussissais', il: 'réussissait', nous: 'réussissions', vous: 'réussissiez', ils: 'réussissaient' },
+          futur: { je: 'réussirai', tu: 'réussiras', il: 'réussira', nous: 'réussirons', vous: 'réussirez', ils: 'réussiront' },
+          passe_compose: { je: 'ai réussi', tu: 'as réussi', il: 'a réussi', nous: 'avons réussi', vous: 'avez réussi', ils: 'ont réussi' },
+          conditionnel: { je: 'réussirais', tu: 'réussirais', il: 'réussirait', nous: 'réussirions', vous: 'réussiriez', ils: 'réussiraient' },
+        },
+        'perdre': {
+          present: { je: 'perds', tu: 'perds', il: 'perd', nous: 'perdons', vous: 'perdez', ils: 'perdent' },
+          imparfait: { je: 'perdais', tu: 'perdais', il: 'perdait', nous: 'perdions', vous: 'perdiez', ils: 'perdaient' },
+          futur: { je: 'perdrai', tu: 'perdras', il: 'perdra', nous: 'perdrons', vous: 'perdrez', ils: 'perdront' },
+          passe_compose: { je: 'ai perdu', tu: 'as perdu', il: 'a perdu', nous: 'avons perdu', vous: 'avez perdu', ils: 'ont perdu' },
+          conditionnel: { je: 'perdrais', tu: 'perdrais', il: 'perdrait', nous: 'perdrions', vous: 'perdriez', ils: 'perdraient' },
+        },
+        'gagner': {
+          present: { je: 'gagne', tu: 'gagnes', il: 'gagne', nous: 'gagnons', vous: 'gagnez', ils: 'gagnent' },
+          imparfait: { je: 'gagnais', tu: 'gagnais', il: 'gagnait', nous: 'gagnions', vous: 'gagniez', ils: 'gagnaient' },
+          futur: { je: 'gagnerai', tu: 'gagneras', il: 'gagnera', nous: 'gagnerons', vous: 'gagnerez', ils: 'gagneront' },
+          passe_compose: { je: 'ai gagné', tu: 'as gagné', il: 'a gagné', nous: 'avons gagné', vous: 'avez gagné', ils: 'ont gagné' },
+          conditionnel: { je: 'gagnerais', tu: 'gagnerais', il: 'gagnerait', nous: 'gagnerions', vous: 'gagneriez', ils: 'gagneraient' },
+        },
+        'courir': {
+          present: { je: 'cours', tu: 'cours', il: 'court', nous: 'courons', vous: 'courez', ils: 'courent' },
+          imparfait: { je: 'courais', tu: 'courais', il: 'courait', nous: 'courions', vous: 'couriez', ils: 'couraient' },
+          futur: { je: 'courrai', tu: 'courras', il: 'courra', nous: 'courrons', vous: 'courrez', ils: 'courront' },
+          passe_compose: { je: 'ai couru', tu: 'as couru', il: 'a couru', nous: 'avons couru', vous: 'avez couru', ils: 'ont couru' },
+          conditionnel: { je: 'courrais', tu: 'courrais', il: 'courrait', nous: 'courrions', vous: 'courriez', ils: 'courraient' },
+        },
+        'marcher': {
+          present: { je: 'marche', tu: 'marches', il: 'marche', nous: 'marchons', vous: 'marchez', ils: 'marchent' },
+          imparfait: { je: 'marchais', tu: 'marchais', il: 'marchait', nous: 'marchions', vous: 'marchiez', ils: 'marchaient' },
+          futur: { je: 'marcherai', tu: 'marcheras', il: 'marchera', nous: 'marcherons', vous: 'marcherez', ils: 'marcheront' },
+          passe_compose: { je: 'ai marché', tu: 'as marché', il: 'a marché', nous: 'avons marché', vous: 'avez marché', ils: 'ont marché' },
+          conditionnel: { je: 'marcherais', tu: 'marcherais', il: 'marcherait', nous: 'marcherions', vous: 'marcheriez', ils: 'marcheraient' },
         },
       };
 
-      const toggleAll = document.getElementById('toggle-all');
+      const tenseToggleAll = document.getElementById('toggle-all-tenses');
+      const verbToggleAll = document.getElementById('toggle-all-verbs');
+      const verbContainer = document.getElementById('verb-options');
+
       const tenseCheckboxes = Array.from(document.querySelectorAll('.tense-checkbox'));
+      const verbCheckboxes = [];
+
+      if (verbContainer) {
+        VERB_GROUPS.forEach(group => {
+          const groupElement = document.createElement('article');
+          groupElement.className = 'verb-group';
+
+          const title = document.createElement('h4');
+          title.textContent = group.title;
+          groupElement.appendChild(title);
+
+          const list = document.createElement('div');
+          list.className = 'verb-list';
+
+          group.verbs.forEach(verb => {
+            const option = document.createElement('label');
+            option.className = 'verb-option';
+
+            const input = document.createElement('input');
+            input.type = 'checkbox';
+            input.value = verb;
+            input.checked = true;
+            input.className = 'verb-checkbox';
+            option.appendChild(input);
+
+            const text = document.createElement('span');
+            text.textContent = verb;
+            option.appendChild(text);
+
+            list.appendChild(option);
+            verbCheckboxes.push(input);
+          });
+
+          groupElement.appendChild(list);
+          verbContainer.appendChild(groupElement);
+        });
+      }
+
       const startButton = document.getElementById('start-quiz');
       const warning = document.getElementById('selection-warning');
       const quizSection = document.getElementById('quiz-section');
@@ -532,6 +1035,7 @@
 
       const state = {
         selectedTenses: [],
+        selectedVerbs: [],
         currentQuestion: null,
         total: 0,
         correct: 0,
@@ -555,7 +1059,6 @@
           .replace(/\s+/g, ' ')
           .trim();
       }
-
       function formatScore() {
         scoreValue.textContent = `${state.correct} / ${state.total}`;
       }
@@ -650,30 +1153,60 @@
         return array[Math.floor(Math.random() * array.length)];
       }
 
-      function syncToggleAll() {
-        const checkedCount = tenseCheckboxes.filter(cb => cb.checked).length;
+      function getSelectedValues(checkboxes) {
+        return checkboxes.filter(cb => cb.checked).map(cb => cb.value);
+      }
+
+      function buildSelectionWarning(hasTenses, hasVerbs) {
+        if (!hasTenses && !hasVerbs) {
+          return 'Sélectionne au moins un temps verbal et un verbe pour commencer.';
+        }
+        if (!hasTenses) {
+          return 'Sélectionne au moins un temps verbal pour commencer.';
+        }
+        if (!hasVerbs) {
+          return 'Sélectionne au moins un verbe pour commencer.';
+        }
+        return '';
+      }
+
+      function syncMasterCheckbox(master, checkboxes) {
+        const checkedCount = checkboxes.filter(cb => cb.checked).length;
         if (checkedCount === 0) {
-          toggleAll.checked = false;
-          toggleAll.indeterminate = false;
-        } else if (checkedCount === tenseCheckboxes.length) {
-          toggleAll.checked = true;
-          toggleAll.indeterminate = false;
+          master.checked = false;
+          master.indeterminate = false;
+        } else if (checkedCount === checkboxes.length) {
+          master.checked = true;
+          master.indeterminate = false;
         } else {
-          toggleAll.checked = false;
-          toggleAll.indeterminate = true;
+          master.checked = false;
+          master.indeterminate = true;
         }
       }
 
-      toggleAll.addEventListener('change', () => {
-        tenseCheckboxes.forEach(cb => {
-          cb.checked = toggleAll.checked;
-        });
-        toggleAll.indeterminate = false;
-      });
+      function setupMasterToggle(master, checkboxes) {
+        if (!master) {
+          return;
+        }
 
-      tenseCheckboxes.forEach(cb => {
-        cb.addEventListener('change', syncToggleAll);
-      });
+        master.addEventListener('change', () => {
+          checkboxes.forEach(cb => {
+            cb.checked = master.checked;
+          });
+          master.indeterminate = false;
+        });
+
+        checkboxes.forEach(cb => {
+          cb.addEventListener('change', () => {
+            syncMasterCheckbox(master, checkboxes);
+          });
+        });
+
+        syncMasterCheckbox(master, checkboxes);
+      }
+
+      setupMasterToggle(tenseToggleAll, tenseCheckboxes);
+      setupMasterToggle(verbToggleAll, verbCheckboxes);
 
       function resetFeedback() {
         feedbackBox.innerHTML = '';
@@ -682,25 +1215,35 @@
       }
 
       function loadQuestion() {
-        if (!state.selectedTenses.length) {
+        const pairs = [];
+
+        state.selectedTenses.forEach(tenseId => {
+          state.selectedVerbs.forEach(verb => {
+            const data = VERB_CONJUGATIONS[verb];
+            if (data && data[tenseId]) {
+              pairs.push({ tenseId, verb });
+            }
+          });
+        });
+
+        if (!pairs.length) {
+          warning.textContent = 'Aucun verbe n’est disponible avec les sélections actuelles.';
           return;
         }
 
-        const tenseId = pickRandom(state.selectedTenses);
-        const verbs = Object.keys(CONJUGATIONS[tenseId]);
-        const verb = pickRandom(verbs);
+        const choice = pickRandom(pairs);
         const pronounKey = pickRandom(PRONOUN_KEYS);
-        const answer = CONJUGATIONS[tenseId][verb][pronounKey];
+        const answer = VERB_CONJUGATIONS[choice.verb][choice.tenseId][pronounKey];
 
         state.currentQuestion = {
-          tenseId,
-          verb,
+          tenseId: choice.tenseId,
+          verb: choice.verb,
           pronounKey,
           answer,
         };
 
-        questionTense.textContent = `Temps : ${TENSE_INFO[tenseId].label}`;
-        questionVerb.textContent = `Verbe : ${verb}`;
+        questionTense.textContent = `Temps : ${TENSE_INFO[choice.tenseId].label}`;
+        questionVerb.textContent = `Verbe : ${choice.verb}`;
         questionPronoun.textContent = `Pronom : ${PRONOUNS[pronounKey].question}`;
 
         answerInput.value = '';
@@ -713,14 +1256,19 @@
       }
 
       function handleStart() {
-        const selected = tenseCheckboxes.filter(cb => cb.checked).map(cb => cb.value);
-        if (!selected.length) {
-          warning.textContent = 'Sélectionne au moins un temps verbal pour commencer.';
+        const selectedTenses = getSelectedValues(tenseCheckboxes);
+        const selectedVerbs = getSelectedValues(verbCheckboxes);
+        const warningText = buildSelectionWarning(selectedTenses.length > 0, selectedVerbs.length > 0);
+
+        if (warningText) {
+          warning.textContent = warningText;
           return;
         }
+
         warning.textContent = '';
 
-        state.selectedTenses = selected;
+        state.selectedTenses = selectedTenses;
+        state.selectedVerbs = selectedVerbs;
         state.total = 0;
         state.correct = 0;
         formatScore();
@@ -787,11 +1335,18 @@
       }
 
       function handleNext() {
-        if (!state.selectedTenses.length) {
-          warning.textContent = 'Ajoute au moins un temps pour continuer l’entraînement.';
+        const selectedTenses = getSelectedValues(tenseCheckboxes);
+        const selectedVerbs = getSelectedValues(verbCheckboxes);
+        const warningText = buildSelectionWarning(selectedTenses.length > 0, selectedVerbs.length > 0);
+
+        if (warningText) {
+          warning.textContent = warningText;
           return;
         }
+
         warning.textContent = '';
+        state.selectedTenses = selectedTenses;
+        state.selectedVerbs = selectedVerbs;
         loadQuestion();
       }
 
@@ -804,7 +1359,7 @@
         helpText.textContent = '';
       });
 
-      syncToggleAll();
+      formatScore();
     });
   </script>
 </body>
