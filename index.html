@@ -101,10 +101,27 @@
       background: rgba(255, 255, 255, 0.72);
     }
 
+    .verb-group-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 14px;
+    }
+
     .verb-group h4 {
       margin: 0;
       font-size: 1.05rem;
       color: var(--neutral);
+    }
+
+    .verb-group .toggle-all {
+      margin-bottom: 0;
+    }
+
+    .verb-group .toggle-all span {
+      font-size: 0.9rem;
     }
 
     .verb-list {
@@ -982,18 +999,40 @@
 
       const tenseCheckboxes = Array.from(document.querySelectorAll('.tense-checkbox'));
       const verbCheckboxes = [];
+      const verbGroupControllers = [];
 
       if (verbContainer) {
-        VERB_GROUPS.forEach(group => {
+        VERB_GROUPS.forEach((group, index) => {
           const groupElement = document.createElement('article');
           groupElement.className = 'verb-group';
 
+          const header = document.createElement('div');
+          header.className = 'verb-group-header';
+
           const title = document.createElement('h4');
           title.textContent = group.title;
-          groupElement.appendChild(title);
+          header.appendChild(title);
+
+          const toggleLabel = document.createElement('label');
+          toggleLabel.className = 'toggle-all';
+
+          const toggleInput = document.createElement('input');
+          toggleInput.type = 'checkbox';
+          toggleInput.checked = true;
+          toggleInput.id = `toggle-group-${index}`;
+          toggleLabel.appendChild(toggleInput);
+
+          const toggleText = document.createElement('span');
+          toggleText.textContent = 'Tout cocher / décocher ce groupe';
+          toggleLabel.appendChild(toggleText);
+
+          header.appendChild(toggleLabel);
+          groupElement.appendChild(header);
 
           const list = document.createElement('div');
           list.className = 'verb-list';
+
+          const groupCheckboxes = [];
 
           group.verbs.forEach(verb => {
             const option = document.createElement('label');
@@ -1012,10 +1051,13 @@
 
             list.appendChild(option);
             verbCheckboxes.push(input);
+            groupCheckboxes.push(input);
           });
 
           groupElement.appendChild(list);
           verbContainer.appendChild(groupElement);
+
+          verbGroupControllers.push({ master: toggleInput, checkboxes: groupCheckboxes });
         });
       }
 
@@ -1184,21 +1226,29 @@
         }
       }
 
-      function setupMasterToggle(master, checkboxes) {
+      function setupMasterToggle(master, checkboxes, options = {}) {
         if (!master) {
           return;
         }
+
+        const { afterMasterChange, afterCheckboxChange } = options;
 
         master.addEventListener('change', () => {
           checkboxes.forEach(cb => {
             cb.checked = master.checked;
           });
           master.indeterminate = false;
+          if (typeof afterMasterChange === 'function') {
+            afterMasterChange();
+          }
         });
 
         checkboxes.forEach(cb => {
           cb.addEventListener('change', () => {
             syncMasterCheckbox(master, checkboxes);
+            if (typeof afterCheckboxChange === 'function') {
+              afterCheckboxChange();
+            }
           });
         });
 
@@ -1206,7 +1256,28 @@
       }
 
       setupMasterToggle(tenseToggleAll, tenseCheckboxes);
-      setupMasterToggle(verbToggleAll, verbCheckboxes);
+
+      const updateAllGroupMasters = () => {
+        verbGroupControllers.forEach(controller => {
+          syncMasterCheckbox(controller.master, controller.checkboxes);
+        });
+      };
+
+      setupMasterToggle(verbToggleAll, verbCheckboxes, {
+        afterMasterChange: updateAllGroupMasters,
+        afterCheckboxChange: updateAllGroupMasters,
+      });
+
+      verbGroupControllers.forEach(controller => {
+        setupMasterToggle(controller.master, controller.checkboxes, {
+          afterMasterChange: () => {
+            syncMasterCheckbox(verbToggleAll, verbCheckboxes);
+          },
+          afterCheckboxChange: () => {
+            syncMasterCheckbox(verbToggleAll, verbCheckboxes);
+          },
+        });
+      });
 
       function resetFeedback() {
         feedbackBox.innerHTML = '';
