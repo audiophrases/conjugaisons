@@ -1081,6 +1081,7 @@
         currentQuestion: null,
         total: 0,
         correct: 0,
+        awaitingAnswer: false,
       };
 
       const vowels = /^(a|à|â|e|é|è|ê|ë|i|î|ï|o|ô|u|û|ù|y|h|œ|æ)/i;
@@ -1285,6 +1286,18 @@
         helpText.textContent = '';
       }
 
+      function setNextButtonAsSkip() {
+        nextButton.textContent = 'Passer cette question';
+        nextButton.classList.remove('hidden');
+        nextButton.disabled = false;
+      }
+
+      function setNextButtonAsNext() {
+        nextButton.textContent = 'Nouvelle question';
+        nextButton.classList.remove('hidden');
+        nextButton.disabled = false;
+      }
+
       function loadQuestion() {
         const pairs = [];
 
@@ -1320,8 +1333,8 @@
         answerInput.value = '';
         answerInput.disabled = false;
         submitButton.disabled = false;
-        nextButton.classList.add('hidden');
-        nextButton.disabled = true;
+        state.awaitingAnswer = true;
+        setNextButtonAsSkip();
         resetFeedback();
         answerInput.focus();
       }
@@ -1400,8 +1413,8 @@
         formatScore();
         submitButton.disabled = true;
         answerInput.disabled = true;
-        nextButton.classList.remove('hidden');
-        nextButton.disabled = false;
+        state.awaitingAnswer = false;
+        setNextButtonAsNext();
         nextButton.focus();
       }
 
