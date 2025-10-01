@@ -131,6 +131,30 @@
       margin-top: 14px;
     }
 
+    .verb-subgroups {
+      display: grid;
+      gap: 16px;
+    }
+
+    .verb-subgroup {
+      display: grid;
+      gap: 8px;
+      padding: 12px;
+      border-radius: 12px;
+      background: rgba(60, 109, 240, 0.04);
+      border: 1px solid rgba(60, 109, 240, 0.1);
+    }
+
+    .verb-subgroup-title {
+      margin: 0;
+      font-size: 0.95rem;
+      color: var(--accent-dark);
+    }
+
+    .verb-subgroup-list {
+      margin-top: 10px;
+    }
+
     .verb-option {
       display: flex;
       align-items: center;
@@ -576,7 +600,7 @@
         },
         {
           title: 'Verbes du quotidien',
-          verbs: ['prendre', 'mettre', 'donner', 'parler', 'aimer', 'travailler', 'habiter', 'regarder', 'écouter', 'manger', 'boire'],
+          verbs: ['prendre', 'mettre', 'donner', 'parler', 'aimer', 'travailler', 'habiter', 'regarder', 'écouter', 'boire'],
         },
         {
           title: 'Mouvements et déplacements',
@@ -584,7 +608,7 @@
         },
         {
           title: 'Apprendre et choisir',
-          verbs: ['acheter', 'payer', 'choisir', 'finir', 'comprendre', 'apprendre'],
+          verbs: ['choisir', 'finir', 'comprendre', 'apprendre'],
         },
         {
           title: 'Lecture et ouverture',
@@ -604,7 +628,16 @@
         },
         {
           title: 'Efforts et réussite',
-          verbs: ['attendre', 'commencer', 'réussir', 'perdre', 'gagner'],
+          verbs: ['attendre', 'réussir', 'perdre', 'gagner'],
+        },
+        {
+          title: 'Cas particuliers au présent (-ER)',
+          subgroups: [
+            { title: 'Manger, commencer (-ger, -cer)', verbs: ['manger', 'commencer'] },
+            { title: 'Appeler, jeter (-eler, -eter)', verbs: ['appeler', 'jeter'] },
+            { title: 'Acheter, préférer (-eter, -érer)', verbs: ['acheter', 'préférer'] },
+            { title: 'Payer, balayer, nettoyer, essuyer (-ayer, -oyer, -uyer)', verbs: ['payer', 'balayer', 'nettoyer', 'essuyer'] },
+          ],
         },
         {
           title: 'Bouger',
@@ -834,6 +867,20 @@
           passe_compose: { je: 'suis passé', tu: 'es passé', il: 'est passé', nous: 'sommes passés', vous: 'êtes passés', ils: 'sont passés' },
           conditionnel: { je: 'passerais', tu: 'passerais', il: 'passerait', nous: 'passerions', vous: 'passeriez', ils: 'passeraient' },
         },
+        'appeler': {
+          present: { je: 'appelle', tu: 'appelles', il: 'appelle', nous: 'appelons', vous: 'appelez', ils: 'appellent' },
+          imparfait: { je: 'appelais', tu: 'appelais', il: 'appelait', nous: 'appelions', vous: 'appeliez', ils: 'appelaient' },
+          futur: { je: 'appellerai', tu: 'appelleras', il: 'appellera', nous: 'appellerons', vous: 'appellerez', ils: 'appelleront' },
+          passe_compose: { je: 'ai appelé', tu: 'as appelé', il: 'a appelé', nous: 'avons appelé', vous: 'avez appelé', ils: 'ont appelé' },
+          conditionnel: { je: 'appellerais', tu: 'appellerais', il: 'appellerait', nous: 'appellerions', vous: 'appelleriez', ils: 'appelleraient' },
+        },
+        'jeter': {
+          present: { je: 'jette', tu: 'jettes', il: 'jette', nous: 'jetons', vous: 'jetez', ils: 'jettent' },
+          imparfait: { je: 'jetais', tu: 'jetais', il: 'jetait', nous: 'jetions', vous: 'jetiez', ils: 'jetaient' },
+          futur: { je: 'jetterai', tu: 'jetteras', il: 'jettera', nous: 'jetterons', vous: 'jetterez', ils: 'jetteront' },
+          passe_compose: { je: 'ai jeté', tu: 'as jeté', il: 'a jeté', nous: 'avons jeté', vous: 'avez jeté', ils: 'ont jeté' },
+          conditionnel: { je: 'jetterais', tu: 'jetterais', il: 'jetterait', nous: 'jetterions', vous: 'jetteriez', ils: 'jetteraient' },
+        },
         'acheter': {
           present: { je: 'achète', tu: 'achètes', il: 'achète', nous: 'achetons', vous: 'achetez', ils: 'achètent' },
           imparfait: { je: 'achetais', tu: 'achetais', il: 'achetait', nous: 'achetions', vous: 'achetiez', ils: 'achetaient' },
@@ -847,6 +894,34 @@
           futur: { je: 'paierai', tu: 'paieras', il: 'paiera', nous: 'paierons', vous: 'paierez', ils: 'paieront' },
           passe_compose: { je: 'ai payé', tu: 'as payé', il: 'a payé', nous: 'avons payé', vous: 'avez payé', ils: 'ont payé' },
           conditionnel: { je: 'paierais', tu: 'paierais', il: 'paierait', nous: 'paierions', vous: 'paieriez', ils: 'paieraient' },
+        },
+        'balayer': {
+          present: { je: 'balaie', tu: 'balaies', il: 'balaie', nous: 'balayons', vous: 'balayez', ils: 'balaient' },
+          imparfait: { je: 'balayais', tu: 'balayais', il: 'balayait', nous: 'balayions', vous: 'balayiez', ils: 'balayaient' },
+          futur: { je: 'balayerai', tu: 'balayeras', il: 'balayera', nous: 'balayerons', vous: 'balayerez', ils: 'balayeront' },
+          passe_compose: { je: 'ai balayé', tu: 'as balayé', il: 'a balayé', nous: 'avons balayé', vous: 'avez balayé', ils: 'ont balayé' },
+          conditionnel: { je: 'balayerais', tu: 'balayerais', il: 'balayerait', nous: 'balayerions', vous: 'balayeriez', ils: 'balayeraient' },
+        },
+        'nettoyer': {
+          present: { je: 'nettoie', tu: 'nettoies', il: 'nettoie', nous: 'nettoyons', vous: 'nettoyez', ils: 'nettoient' },
+          imparfait: { je: 'nettoyais', tu: 'nettoyais', il: 'nettoyait', nous: 'nettoyions', vous: 'nettoyiez', ils: 'nettoyaient' },
+          futur: { je: 'nettoierai', tu: 'nettoieras', il: 'nettoiera', nous: 'nettoierons', vous: 'nettoierez', ils: 'nettoieront' },
+          passe_compose: { je: 'ai nettoyé', tu: 'as nettoyé', il: 'a nettoyé', nous: 'avons nettoyé', vous: 'avez nettoyé', ils: 'ont nettoyé' },
+          conditionnel: { je: 'nettoierais', tu: 'nettoierais', il: 'nettoierait', nous: 'nettoierions', vous: 'nettoieriez', ils: 'nettoieraient' },
+        },
+        'essuyer': {
+          present: { je: 'essuie', tu: 'essuies', il: 'essuie', nous: 'essuyons', vous: 'essuyez', ils: 'essuient' },
+          imparfait: { je: 'essuyais', tu: 'essuyais', il: 'essuyait', nous: 'essuyions', vous: 'essuyiez', ils: 'essuyaient' },
+          futur: { je: 'essuierai', tu: 'essuieras', il: 'essuiera', nous: 'essuierons', vous: 'essuierez', ils: 'essuieront' },
+          passe_compose: { je: 'ai essuyé', tu: 'as essuyé', il: 'a essuyé', nous: 'avons essuyé', vous: 'avez essuyé', ils: 'ont essuyé' },
+          conditionnel: { je: 'essuierais', tu: 'essuierais', il: 'essuierait', nous: 'essuierions', vous: 'essuieriez', ils: 'essuieraient' },
+        },
+        'préférer': {
+          present: { je: 'préfère', tu: 'préfères', il: 'préfère', nous: 'préférons', vous: 'préférez', ils: 'préfèrent' },
+          imparfait: { je: 'préférais', tu: 'préférais', il: 'préférait', nous: 'préférions', vous: 'préfériez', ils: 'préféraient' },
+          futur: { je: 'préférerai', tu: 'préféreras', il: 'préférera', nous: 'préférerons', vous: 'préférerez', ils: 'préféreront' },
+          passe_compose: { je: 'ai préféré', tu: 'as préféré', il: 'a préféré', nous: 'avons préféré', vous: 'avez préféré', ils: 'ont préféré' },
+          conditionnel: { je: 'préférerais', tu: 'préférerais', il: 'préférerait', nous: 'préférerions', vous: 'préféreriez', ils: 'préféreraient' },
         },
         'choisir': {
           present: { je: 'choisis', tu: 'choisis', il: 'choisit', nous: 'choisissons', vous: 'choisissez', ils: 'choisissent' },
@@ -1061,12 +1136,9 @@
           header.appendChild(toggleLabel);
           groupElement.appendChild(header);
 
-          const list = document.createElement('div');
-          list.className = 'verb-list';
-
           const groupCheckboxes = [];
 
-          group.verbs.forEach(verb => {
+          const addVerbOption = (container, verb) => {
             const option = document.createElement('label');
             option.className = 'verb-option';
 
@@ -1081,12 +1153,45 @@
             text.textContent = verb;
             option.appendChild(text);
 
-            list.appendChild(option);
+            container.appendChild(option);
             verbCheckboxes.push(input);
             groupCheckboxes.push(input);
-          });
+          };
 
-          groupElement.appendChild(list);
+          if (group.subgroups) {
+            const subgroupContainer = document.createElement('div');
+            subgroupContainer.className = 'verb-subgroups';
+
+            group.subgroups.forEach(subgroup => {
+              const subgroupElement = document.createElement('div');
+              subgroupElement.className = 'verb-subgroup';
+
+              if (subgroup.title) {
+                const subgroupTitle = document.createElement('h5');
+                subgroupTitle.className = 'verb-subgroup-title';
+                subgroupTitle.textContent = subgroup.title;
+                subgroupElement.appendChild(subgroupTitle);
+              }
+
+              const subList = document.createElement('div');
+              subList.className = 'verb-list verb-subgroup-list';
+
+              subgroup.verbs.forEach(verb => addVerbOption(subList, verb));
+
+              subgroupElement.appendChild(subList);
+              subgroupContainer.appendChild(subgroupElement);
+            });
+
+            groupElement.appendChild(subgroupContainer);
+          } else if (group.verbs) {
+            const list = document.createElement('div');
+            list.className = 'verb-list';
+
+            group.verbs.forEach(verb => addVerbOption(list, verb));
+
+            groupElement.appendChild(list);
+          }
+
           verbContainer.appendChild(groupElement);
 
           verbGroupControllers.push({ master: toggleInput, checkboxes: groupCheckboxes });
