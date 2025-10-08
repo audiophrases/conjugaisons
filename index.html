@@ -534,6 +534,20 @@
               <small>Actions soumises à une condition.</small>
             </span>
           </label>
+          <label class="tense-option">
+            <input type="checkbox" value="subjonctif_present" class="tense-checkbox" checked />
+            <span>
+              <strong>Subjonctif présent</strong>
+              <small>Exprime le doute, le souhait ou la nécessité.</small>
+            </span>
+          </label>
+          <label class="tense-option">
+            <input type="checkbox" value="subjonctif_passe" class="tense-checkbox" checked />
+            <span>
+              <strong>Subjonctif passé</strong>
+              <small>Action passée envisagée, incertaine ou souhaitée.</small>
+            </span>
+          </label>
         </div>
       </div>
 
@@ -591,6 +605,8 @@
         futur: { label: 'Futur simple' },
         passe_compose: { label: 'Passé composé' },
         conditionnel: { label: 'Conditionnel présent' },
+        subjonctif_present: { label: 'Subjonctif présent' },
+        subjonctif_passe: { label: 'Subjonctif passé' },
       };
 
       const VERB_GROUPS = [
@@ -1099,6 +1115,150 @@
           conditionnel: { je: 'marcherais', tu: 'marcherais', il: 'marcherait', nous: 'marcherions', vous: 'marcheriez', ils: 'marcheraient' },
         },
       };
+
+      const SUBJONCTIF_PRESENT = {
+        'être': { je: 'sois', tu: 'sois', il: 'soit', nous: 'soyons', vous: 'soyez', ils: 'soient' },
+        'avoir': { je: 'aie', tu: 'aies', il: 'ait', nous: 'ayons', vous: 'ayez', ils: 'aient' },
+        'aller': { je: 'aille', tu: 'ailles', il: 'aille', nous: 'allions', vous: 'alliez', ils: 'aillent' },
+        'faire': { je: 'fasse', tu: 'fasses', il: 'fasse', nous: 'fassions', vous: 'fassiez', ils: 'fassent' },
+        'dire': { je: 'dise', tu: 'dises', il: 'dise', nous: 'disions', vous: 'disiez', ils: 'disent' },
+        'pouvoir': { je: 'puisse', tu: 'puisses', il: 'puisse', nous: 'puissions', vous: 'puissiez', ils: 'puissent' },
+        'vouloir': { je: 'veuille', tu: 'veuilles', il: 'veuille', nous: 'voulions', vous: 'vouliez', ils: 'veuillent' },
+        'devoir': { je: 'doive', tu: 'doives', il: 'doive', nous: 'devions', vous: 'deviez', ils: 'doivent' },
+        'savoir': { je: 'sache', tu: 'saches', il: 'sache', nous: 'sachions', vous: 'sachiez', ils: 'sachent' },
+        'venir': { je: 'vienne', tu: 'viennes', il: 'vienne', nous: 'venions', vous: 'veniez', ils: 'viennent' },
+        'prendre': { je: 'prenne', tu: 'prennes', il: 'prenne', nous: 'prenions', vous: 'preniez', ils: 'prennent' },
+        'mettre': { je: 'mette', tu: 'mettes', il: 'mette', nous: 'mettions', vous: 'mettiez', ils: 'mettent' },
+        'donner': { je: 'donne', tu: 'donnes', il: 'donne', nous: 'donnions', vous: 'donniez', ils: 'donnent' },
+        'parler': { je: 'parle', tu: 'parles', il: 'parle', nous: 'parlions', vous: 'parliez', ils: 'parlent' },
+        'aimer': { je: 'aime', tu: 'aimes', il: 'aime', nous: 'aimions', vous: 'aimiez', ils: 'aiment' },
+        'travailler': { je: 'travaille', tu: 'travailles', il: 'travaille', nous: 'travaillions', vous: 'travailliez', ils: 'travaillent' },
+        'habiter': { je: 'habite', tu: 'habites', il: 'habite', nous: 'habitions', vous: 'habitiez', ils: 'habitent' },
+        'regarder': { je: 'regarde', tu: 'regardes', il: 'regarde', nous: 'regardions', vous: 'regardiez', ils: 'regardent' },
+        'écouter': { je: 'écoute', tu: 'écoutes', il: 'écoute', nous: 'écoutions', vous: 'écoutiez', ils: 'écoutent' },
+        'manger': { je: 'mange', tu: 'manges', il: 'mange', nous: 'mangions', vous: 'mangiez', ils: 'mangent' },
+        'boire': { je: 'boive', tu: 'boives', il: 'boive', nous: 'buvions', vous: 'buviez', ils: 'boivent' },
+        'arriver': { je: 'arrive', tu: 'arrives', il: 'arrive', nous: 'arrivions', vous: 'arriviez', ils: 'arrivent' },
+        'entrer': { je: 'entre', tu: 'entres', il: 'entre', nous: 'entrions', vous: 'entriez', ils: 'entrent' },
+        'sortir': { je: 'sorte', tu: 'sortes', il: 'sorte', nous: 'sortions', vous: 'sortiez', ils: 'sortent' },
+        'partir': { je: 'parte', tu: 'partes', il: 'parte', nous: 'partions', vous: 'partiez', ils: 'partent' },
+        'rentrer': { je: 'rentre', tu: 'rentres', il: 'rentre', nous: 'rentrions', vous: 'rentriez', ils: 'rentrent' },
+        'rester': { je: 'reste', tu: 'restes', il: 'reste', nous: 'restions', vous: 'restiez', ils: 'restent' },
+        'monter': { je: 'monte', tu: 'montes', il: 'monte', nous: 'montions', vous: 'montiez', ils: 'montent' },
+        'descendre': { je: 'descende', tu: 'descendes', il: 'descende', nous: 'descendions', vous: 'descendiez', ils: 'descendent' },
+        'passer': { je: 'passe', tu: 'passes', il: 'passe', nous: 'passions', vous: 'passiez', ils: 'passent' },
+        'appeler': { je: 'appelle', tu: 'appelles', il: 'appelle', nous: 'appelions', vous: 'appeliez', ils: 'appellent' },
+        'jeter': { je: 'jette', tu: 'jettes', il: 'jette', nous: 'jetions', vous: 'jetiez', ils: 'jettent' },
+        'acheter': { je: 'achète', tu: 'achètes', il: 'achète', nous: 'achetions', vous: 'achetiez', ils: 'achètent' },
+        'payer': { je: 'paie', tu: 'paies', il: 'paie', nous: 'payions', vous: 'payiez', ils: 'paient' },
+        'balayer': { je: 'balaie', tu: 'balaies', il: 'balaie', nous: 'balayions', vous: 'balayiez', ils: 'balaient' },
+        'nettoyer': { je: 'nettoie', tu: 'nettoies', il: 'nettoie', nous: 'nettoyions', vous: 'nettoyiez', ils: 'nettoient' },
+        'essuyer': { je: 'essuie', tu: 'essuies', il: 'essuie', nous: 'essuyions', vous: 'essuyiez', ils: 'essuient' },
+        'préférer': { je: 'préfère', tu: 'préfères', il: 'préfère', nous: 'préférions', vous: 'préfériez', ils: 'préfèrent' },
+        'choisir': { je: 'choisisse', tu: 'choisisses', il: 'choisisse', nous: 'choisissions', vous: 'choisissiez', ils: 'choisissent' },
+        'finir': { je: 'finisse', tu: 'finisses', il: 'finisse', nous: 'finissions', vous: 'finissiez', ils: 'finissent' },
+        'comprendre': { je: 'comprenne', tu: 'comprennes', il: 'comprenne', nous: 'comprenions', vous: 'compreniez', ils: 'comprennent' },
+        'apprendre': { je: 'apprenne', tu: 'apprennes', il: 'apprenne', nous: 'apprenions', vous: 'appreniez', ils: 'apprennent' },
+        'écrire': { je: 'écrive', tu: 'écrives', il: 'écrive', nous: 'écrivions', vous: 'écriviez', ils: 'écrivent' },
+        'lire': { je: 'lise', tu: 'lises', il: 'lise', nous: 'lisions', vous: 'lisiez', ils: 'lisent' },
+        'ouvrir': { je: 'ouvre', tu: 'ouvres', il: 'ouvre', nous: 'ouvrions', vous: 'ouvriez', ils: 'ouvrent' },
+        'fermer': { je: 'ferme', tu: 'fermes', il: 'ferme', nous: 'fermions', vous: 'fermiez', ils: 'ferment' },
+        'dormir': { je: 'dorme', tu: 'dormes', il: 'dorme', nous: 'dormions', vous: 'dormiez', ils: 'dorment' },
+        'se lever': { je: 'me lève', tu: 'te lèves', il: 'se lève', nous: 'nous levions', vous: 'vous leviez', ils: 'se lèvent' },
+        'se coucher': { je: 'me couche', tu: 'te couches', il: 'se couche', nous: 'nous couchions', vous: 'vous couchiez', ils: 'se couchent' },
+        'se réveiller': { je: 'me réveille', tu: 'te réveilles', il: 'se réveille', nous: 'nous réveillions', vous: 'vous réveilliez', ils: 'se réveillent' },
+        'se laver': { je: 'me lave', tu: 'te laves', il: 'se lave', nous: 'nous lavions', vous: 'vous laviez', ils: 'se lavent' },
+        "s'habiller": { je: "m'habille", tu: "t'habilles", il: "s'habille", nous: 'nous habillions', vous: 'vous habilliez', ils: "s'habillent" },
+        "s'amuser": { je: "m'amuse", tu: "t'amuses", il: "s'amuse", nous: 'nous amusions', vous: 'vous amusiez', ils: "s'amusent" },
+        'se dépêcher': { je: 'me dépêche', tu: 'te dépêches', il: 'se dépêche', nous: 'nous dépêchions', vous: 'vous dépêchiez', ils: 'se dépêchent' },
+        'se promener': { je: 'me promène', tu: 'te promènes', il: 'se promène', nous: 'nous promenions', vous: 'vous promeniez', ils: 'se promènent' },
+        'se souvenir': { je: 'me souvienne', tu: 'te souviennes', il: 'se souvienne', nous: 'nous souvenions', vous: 'vous souveniez', ils: 'se souviennent' },
+        'attendre': { je: 'attende', tu: 'attendes', il: 'attende', nous: 'attendions', vous: 'attendiez', ils: 'attendent' },
+        'commencer': { je: 'commence', tu: 'commences', il: 'commence', nous: 'commencions', vous: 'commenciez', ils: 'commencent' },
+        'réussir': { je: 'réussisse', tu: 'réussisses', il: 'réussisse', nous: 'réussissions', vous: 'réussissiez', ils: 'réussissent' },
+        'perdre': { je: 'perde', tu: 'perdes', il: 'perde', nous: 'perdions', vous: 'perdiez', ils: 'perdent' },
+        'gagner': { je: 'gagne', tu: 'gagnes', il: 'gagne', nous: 'gagnions', vous: 'gagniez', ils: 'gagnent' },
+        'courir': { je: 'coure', tu: 'coures', il: 'coure', nous: 'courions', vous: 'couriez', ils: 'courent' },
+        'marcher': { je: 'marche', tu: 'marches', il: 'marche', nous: 'marchions', vous: 'marchiez', ils: 'marchent' },
+      };
+
+      const SUBJONCTIF_PASSE = {
+        'être': { je: 'aie été', tu: 'aies été', il: 'ait été', nous: 'ayons été', vous: 'ayez été', ils: 'aient été' },
+        'avoir': { je: 'aie eu', tu: 'aies eu', il: 'ait eu', nous: 'ayons eu', vous: 'ayez eu', ils: 'aient eu' },
+        'aller': { je: 'sois allé', tu: 'sois allé', il: 'soit allé', nous: 'soyons allés', vous: 'soyez allés', ils: 'soient allés' },
+        'faire': { je: 'aie fait', tu: 'aies fait', il: 'ait fait', nous: 'ayons fait', vous: 'ayez fait', ils: 'aient fait' },
+        'dire': { je: 'aie dit', tu: 'aies dit', il: 'ait dit', nous: 'ayons dit', vous: 'ayez dit', ils: 'aient dit' },
+        'pouvoir': { je: 'aie pu', tu: 'aies pu', il: 'ait pu', nous: 'ayons pu', vous: 'ayez pu', ils: 'aient pu' },
+        'vouloir': { je: 'aie voulu', tu: 'aies voulu', il: 'ait voulu', nous: 'ayons voulu', vous: 'ayez voulu', ils: 'aient voulu' },
+        'devoir': { je: 'aie dû', tu: 'aies dû', il: 'ait dû', nous: 'ayons dû', vous: 'ayez dû', ils: 'aient dû' },
+        'savoir': { je: 'aie su', tu: 'aies su', il: 'ait su', nous: 'ayons su', vous: 'ayez su', ils: 'aient su' },
+        'venir': { je: 'sois venu', tu: 'sois venu', il: 'soit venu', nous: 'soyons venus', vous: 'soyez venus', ils: 'soient venus' },
+        'prendre': { je: 'aie pris', tu: 'aies pris', il: 'ait pris', nous: 'ayons pris', vous: 'ayez pris', ils: 'aient pris' },
+        'mettre': { je: 'aie mis', tu: 'aies mis', il: 'ait mis', nous: 'ayons mis', vous: 'ayez mis', ils: 'aient mis' },
+        'donner': { je: 'aie donné', tu: 'aies donné', il: 'ait donné', nous: 'ayons donné', vous: 'ayez donné', ils: 'aient donné' },
+        'parler': { je: 'aie parlé', tu: 'aies parlé', il: 'ait parlé', nous: 'ayons parlé', vous: 'ayez parlé', ils: 'aient parlé' },
+        'aimer': { je: 'aie aimé', tu: 'aies aimé', il: 'ait aimé', nous: 'ayons aimé', vous: 'ayez aimé', ils: 'aient aimé' },
+        'travailler': { je: 'aie travaillé', tu: 'aies travaillé', il: 'ait travaillé', nous: 'ayons travaillé', vous: 'ayez travaillé', ils: 'aient travaillé' },
+        'habiter': { je: 'aie habité', tu: 'aies habité', il: 'ait habité', nous: 'ayons habité', vous: 'ayez habité', ils: 'aient habité' },
+        'regarder': { je: 'aie regardé', tu: 'aies regardé', il: 'ait regardé', nous: 'ayons regardé', vous: 'ayez regardé', ils: 'aient regardé' },
+        'écouter': { je: 'aie écouté', tu: 'aies écouté', il: 'ait écouté', nous: 'ayons écouté', vous: 'ayez écouté', ils: 'aient écouté' },
+        'manger': { je: 'aie mangé', tu: 'aies mangé', il: 'ait mangé', nous: 'ayons mangé', vous: 'ayez mangé', ils: 'aient mangé' },
+        'boire': { je: 'aie bu', tu: 'aies bu', il: 'ait bu', nous: 'ayons bu', vous: 'ayez bu', ils: 'aient bu' },
+        'arriver': { je: 'sois arrivé', tu: 'sois arrivé', il: 'soit arrivé', nous: 'soyons arrivés', vous: 'soyez arrivés', ils: 'soient arrivés' },
+        'entrer': { je: 'sois entré', tu: 'sois entré', il: 'soit entré', nous: 'soyons entrés', vous: 'soyez entrés', ils: 'soient entrés' },
+        'sortir': { je: 'sois sorti', tu: 'sois sorti', il: 'soit sorti', nous: 'soyons sortis', vous: 'soyez sortis', ils: 'soient sortis' },
+        'partir': { je: 'sois parti', tu: 'sois parti', il: 'soit parti', nous: 'soyons partis', vous: 'soyez partis', ils: 'soient partis' },
+        'rentrer': { je: 'sois rentré', tu: 'sois rentré', il: 'soit rentré', nous: 'soyons rentrés', vous: 'soyez rentrés', ils: 'soient rentrés' },
+        'rester': { je: 'sois resté', tu: 'sois resté', il: 'soit resté', nous: 'soyons restés', vous: 'soyez restés', ils: 'soient restés' },
+        'monter': { je: 'sois monté', tu: 'sois monté', il: 'soit monté', nous: 'soyons montés', vous: 'soyez montés', ils: 'soient montés' },
+        'descendre': { je: 'sois descendu', tu: 'sois descendu', il: 'soit descendu', nous: 'soyons descendus', vous: 'soyez descendus', ils: 'soient descendus' },
+        'passer': { je: 'sois passé', tu: 'sois passé', il: 'soit passé', nous: 'soyons passés', vous: 'soyez passés', ils: 'soient passés' },
+        'appeler': { je: 'aie appelé', tu: 'aies appelé', il: 'ait appelé', nous: 'ayons appelé', vous: 'ayez appelé', ils: 'aient appelé' },
+        'jeter': { je: 'aie jeté', tu: 'aies jeté', il: 'ait jeté', nous: 'ayons jeté', vous: 'ayez jeté', ils: 'aient jeté' },
+        'acheter': { je: 'aie acheté', tu: 'aies acheté', il: 'ait acheté', nous: 'ayons acheté', vous: 'ayez acheté', ils: 'aient acheté' },
+        'payer': { je: 'aie payé', tu: 'aies payé', il: 'ait payé', nous: 'ayons payé', vous: 'ayez payé', ils: 'aient payé' },
+        'balayer': { je: 'aie balayé', tu: 'aies balayé', il: 'ait balayé', nous: 'ayons balayé', vous: 'ayez balayé', ils: 'aient balayé' },
+        'nettoyer': { je: 'aie nettoyé', tu: 'aies nettoyé', il: 'ait nettoyé', nous: 'ayons nettoyé', vous: 'ayez nettoyé', ils: 'aient nettoyé' },
+        'essuyer': { je: 'aie essuyé', tu: 'aies essuyé', il: 'ait essuyé', nous: 'ayons essuyé', vous: 'ayez essuyé', ils: 'aient essuyé' },
+        'préférer': { je: 'aie préféré', tu: 'aies préféré', il: 'ait préféré', nous: 'ayons préféré', vous: 'ayez préféré', ils: 'aient préféré' },
+        'choisir': { je: 'aie choisi', tu: 'aies choisi', il: 'ait choisi', nous: 'ayons choisi', vous: 'ayez choisi', ils: 'aient choisi' },
+        'finir': { je: 'aie fini', tu: 'aies fini', il: 'ait fini', nous: 'ayons fini', vous: 'ayez fini', ils: 'aient fini' },
+        'comprendre': { je: 'aie compris', tu: 'aies compris', il: 'ait compris', nous: 'ayons compris', vous: 'ayez compris', ils: 'aient compris' },
+        'apprendre': { je: 'aie appris', tu: 'aies appris', il: 'ait appris', nous: 'ayons appris', vous: 'ayez appris', ils: 'aient appris' },
+        'écrire': { je: 'aie écrit', tu: 'aies écrit', il: 'ait écrit', nous: 'ayons écrit', vous: 'ayez écrit', ils: 'aient écrit' },
+        'lire': { je: 'aie lu', tu: 'aies lu', il: 'ait lu', nous: 'ayons lu', vous: 'ayez lu', ils: 'aient lu' },
+        'ouvrir': { je: 'aie ouvert', tu: 'aies ouvert', il: 'ait ouvert', nous: 'ayons ouvert', vous: 'ayez ouvert', ils: 'aient ouvert' },
+        'fermer': { je: 'aie fermé', tu: 'aies fermé', il: 'ait fermé', nous: 'ayons fermé', vous: 'ayez fermé', ils: 'aient fermé' },
+        'dormir': { je: 'aie dormi', tu: 'aies dormi', il: 'ait dormi', nous: 'ayons dormi', vous: 'ayez dormi', ils: 'aient dormi' },
+        'se lever': { je: 'me sois levé', tu: 'te sois levé', il: 'se soit levé', nous: 'nous soyons levés', vous: 'vous soyez levés', ils: 'se soient levés' },
+        'se coucher': { je: 'me sois couché', tu: 'te sois couché', il: 'se soit couché', nous: 'nous soyons couchés', vous: 'vous soyez couchés', ils: 'se soient couchés' },
+        'se réveiller': { je: 'me sois réveillé', tu: 'te sois réveillé', il: 'se soit réveillé', nous: 'nous soyons réveillés', vous: 'vous soyez réveillés', ils: 'se soient réveillés' },
+        'se laver': { je: 'me sois lavé', tu: 'te sois lavé', il: 'se soit lavé', nous: 'nous soyons lavés', vous: 'vous soyez lavés', ils: 'se soient lavés' },
+        "s'habiller": { je: "me sois habillé", tu: "te sois habillé", il: "se soit habillé", nous: 'nous soyons habillés', vous: 'vous soyez habillés', ils: "se soient habillés" },
+        "s'amuser": { je: "me sois amusé", tu: "te sois amusé", il: "se soit amusé", nous: 'nous soyons amusés', vous: 'vous soyez amusés', ils: "se soient amusés" },
+        'se dépêcher': { je: 'me sois dépêché', tu: 'te sois dépêché', il: 'se soit dépêché', nous: 'nous soyons dépêchés', vous: 'vous soyez dépêchés', ils: 'se soient dépêchés' },
+        'se promener': { je: 'me sois promené', tu: 'te sois promené', il: 'se soit promené', nous: 'nous soyons promenés', vous: 'vous soyez promenés', ils: 'se soient promenés' },
+        'se souvenir': { je: 'me sois souvenu', tu: 'te sois souvenu', il: 'se soit souvenu', nous: 'nous soyons souvenus', vous: 'vous soyez souvenus', ils: 'se soient souvenus' },
+        'attendre': { je: 'aie attendu', tu: 'aies attendu', il: 'ait attendu', nous: 'ayons attendu', vous: 'ayez attendu', ils: 'aient attendu' },
+        'commencer': { je: 'aie commencé', tu: 'aies commencé', il: 'ait commencé', nous: 'ayons commencé', vous: 'ayez commencé', ils: 'aient commencé' },
+        'réussir': { je: 'aie réussi', tu: 'aies réussi', il: 'ait réussi', nous: 'ayons réussi', vous: 'ayez réussi', ils: 'aient réussi' },
+        'perdre': { je: 'aie perdu', tu: 'aies perdu', il: 'ait perdu', nous: 'ayons perdu', vous: 'ayez perdu', ils: 'aient perdu' },
+        'gagner': { je: 'aie gagné', tu: 'aies gagné', il: 'ait gagné', nous: 'ayons gagné', vous: 'ayez gagné', ils: 'aient gagné' },
+        'courir': { je: 'aie couru', tu: 'aies couru', il: 'ait couru', nous: 'ayons couru', vous: 'ayez couru', ils: 'aient couru' },
+        'marcher': { je: 'aie marché', tu: 'aies marché', il: 'ait marché', nous: 'ayons marché', vous: 'ayez marché', ils: 'aient marché' },
+      };
+
+      Object.entries(SUBJONCTIF_PRESENT).forEach(([verb, forms]) => {
+        if (VERB_CONJUGATIONS[verb]) {
+          VERB_CONJUGATIONS[verb].subjonctif_present = forms;
+        }
+      });
+
+      Object.entries(SUBJONCTIF_PASSE).forEach(([verb, forms]) => {
+        if (VERB_CONJUGATIONS[verb]) {
+          VERB_CONJUGATIONS[verb].subjonctif_passe = forms;
+        }
+      });
 
       const tenseToggleAll = document.getElementById('toggle-all-tenses');
       const verbToggleAll = document.getElementById('toggle-all-verbs');
