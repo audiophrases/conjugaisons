@@ -548,6 +548,13 @@
               <small>Action passée envisagée, incertaine ou souhaitée.</small>
             </span>
           </label>
+          <label class="tense-option">
+            <input type="checkbox" value="imperatif" class="tense-checkbox" checked />
+            <span>
+              <strong>Impératif présent</strong>
+              <small>Consignes et ordres (tu, nous, vous).</small>
+            </span>
+          </label>
         </div>
       </div>
 
@@ -607,6 +614,7 @@
         conditionnel: { label: 'Conditionnel présent' },
         subjonctif_present: { label: 'Subjonctif présent' },
         subjonctif_passe: { label: 'Subjonctif passé' },
+        imperatif: { label: 'Impératif présent' },
       };
 
       const VERB_GROUPS = [
@@ -663,6 +671,7 @@
       };
 
       const PRONOUN_KEYS = ['je', 'tu', 'il', 'nous', 'vous', 'ils'];
+      const IMPERATIVE_PRONOUN_KEYS = ['tu', 'nous', 'vous'];
 
       const VERB_CONJUGATIONS = {
         'être': {
@@ -1360,6 +1369,60 @@
         }
       });
 
+      function isPronominalInfinitive(verb) {
+        return verb.startsWith('se ') || verb.startsWith("s'");
+      }
+
+      function removeReflexivePrefix(form, pronounKey) {
+        const cleaned = form.trim();
+        if (pronounKey === 'tu') return cleaned.replace(/^te\s+|^t'/i, '');
+        if (pronounKey === 'nous') return cleaned.replace(/^nous\s+/i, '');
+        if (pronounKey === 'vous') return cleaned.replace(/^vous\s+/i, '');
+        return cleaned;
+      }
+
+      function shouldDropFinalS(verb, pronounKey) {
+        if (pronounKey !== 'tu') return false;
+        if (verb === 'aller') return true;
+        return verb.endsWith('er');
+      }
+
+      function buildImperativeForm(verb, pronounKey, presentForm) {
+        let base = isPronominalInfinitive(verb)
+          ? removeReflexivePrefix(presentForm, pronounKey)
+          : presentForm.trim();
+
+        if (shouldDropFinalS(verb, pronounKey) && base.endsWith('s')) {
+          base = base.slice(0, -1);
+        }
+
+        if (!isPronominalInfinitive(verb)) {
+          return base;
+        }
+
+        const suffix = pronounKey === 'tu' ? 'toi' : pronounKey;
+        return `${base}-${suffix}`;
+      }
+
+      const IMPERATIVE_OVERRIDES = {
+        'être': { tu: 'sois', nous: 'soyons', vous: 'soyez' },
+        'avoir': { tu: 'aie', nous: 'ayons', vous: 'ayez' },
+        'savoir': { tu: 'sache', nous: 'sachons', vous: 'sachez' },
+        'vouloir': { tu: 'veuille', nous: 'veuillons', vous: 'veuillez' },
+      };
+
+      Object.entries(VERB_CONJUGATIONS).forEach(([verb, tenses]) => {
+        const present = tenses.present;
+        if (!present) return;
+
+        const override = IMPERATIVE_OVERRIDES[verb];
+        tenses.imperatif = {
+          tu: override?.tu || buildImperativeForm(verb, 'tu', present.tu),
+          nous: override?.nous || buildImperativeForm(verb, 'nous', present.nous),
+          vous: override?.vous || buildImperativeForm(verb, 'vous', present.vous),
+        };
+      });
+
       const tenseToggleAll = document.getElementById('toggle-all-tenses');
       const verbToggleAll = document.getElementById('toggle-all-verbs');
       const verbContainer = document.getElementById('verb-options');
@@ -1502,8 +1565,12 @@
         scoreValue.textContent = `${state.correct} / ${state.total}`;
       }
 
-      function buildFullAnswer(pronounKey, form) {
+      function buildFullAnswer(tenseId, pronounKey, form) {
         const trimmed = form.trim();
+        if (tenseId === 'imperatif') {
+          return trimmed;
+        }
+
         const pronounInfo = PRONOUNS[pronounKey];
         const needsElision = pronounKey === 'je' && vowels.test(trimmed);
         const pronoun = needsElision ? "j'" : pronounInfo.subject;
@@ -1562,12 +1629,17 @@
         return `${prefix}${diff}${suffix}`;
       }
 
-      function formatExpectedDiff(pronounKey, segments) {
+      function formatExpectedDiff(tenseId, pronounKey, segments) {
         const prefix = escapeHTML(segments.expected.prefix);
         const suffix = escapeHTML(segments.expected.suffix);
         const diff = segments.expected.diff
           ? `<span class="expected-ending">${escapeHTML(segments.expected.diff)}</span>`
           : '';
+
+        if (tenseId === 'imperatif') {
+          return `${prefix}${diff}${suffix}`;
+        }
+
         const needsElision = pronounKey === 'je' && vowels.test(segments.expected.prefix + segments.expected.diff + segments.expected.suffix);
         const pronounText = needsElision ? "j'" : PRONOUNS[pronounKey].subject;
         const pronoun = escapeHTML(pronounText);
@@ -1700,7 +1772,8 @@
         }
 
         const choice = pickRandom(pairs);
-        const pronounKey = pickRandom(PRONOUN_KEYS);
+        const availablePronouns = choice.tenseId === 'imperatif' ? IMPERATIVE_PRONOUN_KEYS : PRONOUN_KEYS;
+        const pronounKey = pickRandom(availablePronouns);
         const answer = VERB_CONJUGATIONS[choice.verb][choice.tenseId][pronounKey];
 
         state.currentQuestion = {
@@ -1770,7 +1843,7 @@
 
         if (normalizedUser === normalizedExpected) {
           state.correct += 1;
-          const fullAnswer = buildFullAnswer(state.currentQuestion.pronounKey, expected);
+          const fullAnswer = buildFullAnswer(state.currentQuestion.tenseId, state.currentQuestion.pronounKey, expected);
           feedbackBox.innerHTML = `
             <div class="feedback-card correct">
               <h4>Bravo !</h4>
@@ -1781,7 +1854,7 @@
         } else {
           const segments = computeDiffSegments(expected, userRaw);
           const userMarkup = formatUserDiff(segments);
-          const correctionMarkup = formatExpectedDiff(state.currentQuestion.pronounKey, segments);
+          const correctionMarkup = formatExpectedDiff(state.currentQuestion.tenseId, state.currentQuestion.pronounKey, segments);
           const hint = buildHint(segments);
           feedbackBox.innerHTML = `
             <div class="feedback-card incorrect">
