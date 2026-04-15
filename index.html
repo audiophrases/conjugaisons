@@ -555,6 +555,13 @@
               <small>Consignes et ordres (tu, nous, vous).</small>
             </span>
           </label>
+          <label class="tense-option">
+            <input type="checkbox" value="participe_passe" class="tense-checkbox" />
+            <span>
+              <strong>Participe passé (irréguliers)</strong>
+              <small>Formes à mémoriser comme appris, ouvert, venu…</small>
+            </span>
+          </label>
         </div>
       </div>
 
@@ -615,6 +622,7 @@
         subjonctif_present: { label: 'Subjonctif présent' },
         subjonctif_passe: { label: 'Subjonctif passé' },
         imperatif: { label: 'Impératif présent' },
+        participe_passe: { label: 'Participe passé (irréguliers)' },
       };
 
       const VERB_GROUPS = [
@@ -658,6 +666,10 @@
         {
           title: 'Bouger',
           verbs: ['courir', 'marcher'],
+        },
+        {
+          title: 'Participe passé irrégulier (tableau)',
+          verbs: ['apprendre', 'avoir', 'boire', 'conduire', 'connaître', 'comprendre', 'croire', 'descendre', 'devenir', 'devoir', 'dire', 'dormir', 'écrire', 'être', 'faire', 'finir', 'lire', 'mettre', 'mourir', 'naître', 'offrir', 'ouvrir', 'partir', 'pouvoir', 'prendre', 'recevoir', 'rire', 'savoir', 'servir', 'souffrir', 'se souvenir', 'sortir', 'suivre', 'valoir', 'venir', 'vivre', 'voir', 'vouloir'],
         },
       ];
 
@@ -1411,6 +1423,54 @@
         'vouloir': { tu: 'veuille', nous: 'veuillons', vous: 'veuillez' },
       };
 
+      const PARTICIPE_PASSE_FORMS = {
+        'apprendre': 'appris',
+        'avoir': 'eu',
+        'boire': 'bu',
+        'conduire': 'conduit',
+        'connaître': 'connu',
+        'comprendre': 'compris',
+        'croire': 'cru',
+        'descendre': 'descendu',
+        'devenir': 'devenu',
+        'devoir': 'dû',
+        'dire': 'dit',
+        'dormir': 'dormi',
+        'écrire': 'écrit',
+        'être': 'été',
+        'faire': 'fait',
+        'finir': 'fini',
+        'lire': 'lu',
+        'mettre': 'mis',
+        'mourir': 'mort',
+        'naître': 'né',
+        'offrir': 'offert',
+        'ouvrir': 'ouvert',
+        'partir': 'parti',
+        'pouvoir': 'pu',
+        'prendre': 'pris',
+        'recevoir': 'reçu',
+        'rire': 'ri',
+        'savoir': 'su',
+        'servir': 'servi',
+        'souffrir': 'souffert',
+        'se souvenir': 'souvenu',
+        'sortir': 'sorti',
+        'suivre': 'suivi',
+        'valoir': 'valu',
+        'venir': 'venu',
+        'vivre': 'vécu',
+        'voir': 'vu',
+        'vouloir': 'voulu',
+      };
+
+      Object.entries(PARTICIPE_PASSE_FORMS).forEach(([verb, participe]) => {
+        if (!VERB_CONJUGATIONS[verb]) {
+          VERB_CONJUGATIONS[verb] = {};
+        }
+        VERB_CONJUGATIONS[verb].participe_passe = { participe };
+      });
+
       Object.entries(VERB_CONJUGATIONS).forEach(([verb, tenses]) => {
         const present = tenses.present;
         if (!present) return;
@@ -1567,7 +1627,7 @@
 
       function buildFullAnswer(tenseId, pronounKey, form) {
         const trimmed = form.trim();
-        if (tenseId === 'imperatif') {
+        if (tenseId === 'imperatif' || tenseId === 'participe_passe') {
           return trimmed;
         }
 
@@ -1636,7 +1696,7 @@
           ? `<span class="expected-ending">${escapeHTML(segments.expected.diff)}</span>`
           : '';
 
-        if (tenseId === 'imperatif') {
+        if (tenseId === 'imperatif' || tenseId === 'participe_passe') {
           return `${prefix}${diff}${suffix}`;
         }
 
@@ -1772,7 +1832,11 @@
         }
 
         const choice = pickRandom(pairs);
-        const availablePronouns = choice.tenseId === 'imperatif' ? IMPERATIVE_PRONOUN_KEYS : PRONOUN_KEYS;
+        const availablePronouns = choice.tenseId === 'imperatif'
+          ? IMPERATIVE_PRONOUN_KEYS
+          : choice.tenseId === 'participe_passe'
+            ? ['participe']
+            : PRONOUN_KEYS;
         const pronounKey = pickRandom(availablePronouns);
         const answer = VERB_CONJUGATIONS[choice.verb][choice.tenseId][pronounKey];
 
@@ -1785,7 +1849,9 @@
 
         questionTense.textContent = `Temps : ${TENSE_INFO[choice.tenseId].label}`;
         questionVerb.textContent = `Verbe : ${choice.verb}`;
-        questionPronoun.textContent = `Pronom : ${PRONOUNS[pronounKey].question}`;
+        questionPronoun.textContent = choice.tenseId === 'participe_passe'
+          ? 'Pronom : — (forme non personnelle)'
+          : `Pronom : ${PRONOUNS[pronounKey].question}`;
 
         answerInput.value = '';
         answerInput.disabled = false;
